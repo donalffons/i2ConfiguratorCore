@@ -109,9 +109,9 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one model found with id " . $model["id"] . ".", E_USER_ERROR);
         }
 
-        $result = $conn->query("INSERT INTO `i2models` (`id`, `name`, `path`) VALUES (" . $model["id"] . ", '" . $model["name"] . "', '" . $model["path"] . "')");
+        $result = $conn->query("UPDATE `i2models` SET `name` = '" . $model["name"] . "', `path` = '" . $model["id"] ." - " . $model["name"] . "' WHERE `id` = " . $model["id"]);
 
-        return $conn->insert_id;
+        return getModelByID($model["id"]);
     }
     if($_POST["api"] == "saveModel") {
         if(!isset($_POST["model"])) {
@@ -119,9 +119,6 @@ if(isset($_POST["api"])) {
         }
         if(!isset($_POST["model"]["id"])) {
             trigger_error("API: " . __FUNCTION__ . ": No model id parameter specified.", E_USER_ERROR);
-        }
-        if(!isset($_POST["model"]["path"])) {
-            trigger_error("API: " . __FUNCTION__ . ": No model path parameter specified.", E_USER_ERROR);
         }
         if(!isset($_POST["model"]["name"])) {
             trigger_error("API: " . __FUNCTION__ . ": No model name parameter specified.", E_USER_ERROR);
@@ -290,9 +287,9 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one variant found with id " . $variant["id"] . ".", E_USER_ERROR);
         }
 
-        $result = $conn->query("INSERT INTO `i2variants` (`id`, `id model`, `name`) VALUES (" . $variant["id"] . ", '" . $variant["id model"] . "', '" . $variant["name"] . "')");
+        $result = $conn->query("UPDATE `i2variants` SET `id model` = '" . $variant["id model"] . "', `name` = '" . $variant["name"] . "' WHERE `id` = " . $variant["id"]);
 
-        return "";
+        return getVariantByID($variant["id"]);
     }
     if($_POST["api"] == "saveVariant") {
         if(!isset($_POST["variant"])) {
@@ -426,9 +423,9 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one action found with id " . $action["id"] . ".", E_USER_ERROR);
         }
 
-        $result = $conn->query("INSERT INTO `i2actions` (`id`, `id variant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . $action["id variant"] . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "')");
+        $result = $conn->query("UPDATE `i2actions` SET `id variant` = '" . $action["id variant"] . "', `type` = '" . $action["type"] . "', `action` = '" . $action["action"] . "', `name` = '" . $action["name"] . "' WHERE `id` = " . $action["id"]);
 
-        return "";
+        return getActionByID($action["id"]);
     }
     if($_POST["api"] == "saveAction") {
         if(!isset($_POST["action"])) {

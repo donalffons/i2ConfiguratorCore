@@ -1,7 +1,7 @@
 "use strict";
 
-export class i2DatabaseObject {
-    i2DatabaseObject() {
+export default class i2DatabaseObject {
+    constructor() {
         this.data = null;
     }
 }

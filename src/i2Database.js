@@ -5,9 +5,9 @@ let scriptDir = scriptFile.substring(0,scriptFile.lastIndexOf("/")+1);
 
 import * as importJQuery from 'https://code.jquery.com/jquery-3.3.1.js';
 $ = window.$;
-import {i2Model} from './i2Model.js';
-import {i2Variant} from './i2Variant.js';
-import {i2Action} from './i2Action.js';
+//import {i2Model} from './i2Model.js';
+//import {i2Variant} from './i2Variant.js';
+//import {i2Action} from './i2Action.js';
 
 export class i2Database {
     constructor() {
@@ -165,7 +165,7 @@ export class i2Database {
     }
 	
     saveModel(model, cb) {
-		this.POSTDatabase({api: "saveModel", model: model}, {
+		this.POSTDatabase({api: "saveModel", model: model.data}, {
 			success: function() {
 				if(cb !== undefined && cb.success !== undefined) {
 					cb.success();
@@ -326,7 +326,7 @@ export class i2Database {
     }
 	
     saveVariant(variant, cb) {
-		this.POSTDatabase({api: "saveVariant", variant: variant}, {
+		this.POSTDatabase({api: "saveVariant", variant: variant.data}, {
 			success: function() {
 				if(cb !== undefined && cb.success !== undefined) {
 					cb.success();
@@ -466,7 +466,7 @@ export class i2Database {
     }
 	
     saveAction(action, cb) {
-		this.POSTDatabase({api: "saveAction", action: action}, {
+		this.POSTDatabase({api: "saveAction", action: action.data}, {
 			success: function() {
 				if(cb !== undefined && cb.success !== undefined) {
 					cb.success();
@@ -507,3 +507,6 @@ export class i2Database {
 		});
     }
 }
+
+let i2DatabaseDefault = new i2Database();
+export default i2DatabaseDefault;
