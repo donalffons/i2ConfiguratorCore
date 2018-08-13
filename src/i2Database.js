@@ -15,8 +15,9 @@ export class i2Database {
 	}
 	
 	POSTDatabase(data, cb) {
+		let PHPFile = this.PHPFile;
 		$.ajax({
-			url: this.PHPFile,
+			url: PHPFile,
 			type: "POST",
 			data: data,
 			dataType: "json",
@@ -26,7 +27,7 @@ export class i2Database {
 				}
 			},
 			error: function(e) {
-				console.error("Error POSTing to " + this.PHPFile + "!\n" +
+				console.error("Error POSTing to " + PHPFile + "!\n" +
 				"With data: " + JSON.stringify(data) + "\n" +
 				"Server responded with: " + e.status + " (" + e.statusText + ")\n" + 
 				"Server responseText: " + e.responseText);
