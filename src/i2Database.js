@@ -6,6 +6,8 @@ let scriptDir = scriptFile.substring(0,scriptFile.lastIndexOf("/")+1);
 import * as importJQuery from 'https://code.jquery.com/jquery-3.3.1.js';
 $ = window.$;
 import {i2Model} from './i2Model.js';
+import {i2Variant} from './i2Variant.js';
+import {i2Action} from './i2Action.js';
 
 export class i2Database {
     constructor() {
@@ -41,6 +43,32 @@ export class i2Database {
 	}
 
 	// Model Functions
+	
+    getModels(cb) {
+		this.POSTDatabase({api: "getModels"}, {
+			success: function(data) {
+				let models = [];
+				for(var i = 0; i < data.size(); ++i) {
+					models[i] = new i2Model();
+					models[i].data = data;
+				}
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(model);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getModels");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+	}
 	
     getModelByID(id, cb) {
 		this.POSTDatabase({api: "getModelByID", id: id}, {
@@ -198,7 +226,283 @@ export class i2Database {
 		});
     }
 
-    // Variant Functions
+	// Variant Functions
+	
+    getVariantsByModelID(id, cb) {
+		this.POSTDatabase({api: "getVariantsByModelID", id: id}, {
+			success: function(data) {
+				let variants = [];
+				for(var i = 0; i < data.size(); ++i) {
+					variants[i] = new i2Variant();
+					variants[i].data = data;
+				}
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(variants);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getVariantsByModelID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    getVariantByID(id, cb) {
+		this.POSTDatabase({api: "getVariantByID", id: id}, {
+			success: function(data) {
+				let variant = new i2Variant();
+				variant.data = data;
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(variant);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getVariantByID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+	}
+	
+    getVariantsByName(name, cb) {
+		this.POSTDatabase({api: "getVariantsByName", name: name}, {
+			success: function(data) {
+				let variants = [];
+				for(var i = 0; i < data.size(); ++i) {
+					variants[i] = new i2Variant();
+					variants[i].data = data;
+				}
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(variants);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getVariantsByName");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    createNewVariantID(cb) {
+		this.POSTDatabase({api: "createNewVariantID"}, {
+			success: function(data) {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(data);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot createNewVariantID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    saveVariant(variant, cb) {
+		this.POSTDatabase({api: "saveVariant", variant: variant}, {
+			success: function() {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success();
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot saveVariant");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    deleteVariantByID(id, cb) {
+		this.POSTDatabase({api: "deleteVariantByID", id: id}, {
+			success: function(data) {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(data);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot deleteVariantByID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
 
     // Action Functions
+	
+    getActionsByVariantID(id, cb) {
+		this.POSTDatabase({api: "getActionsByVariantID", id: id}, {
+			success: function(data) {
+				let actions = [];
+				for(var i = 0; i < data.size(); ++i) {
+					actions[i] = new i2Action();
+					actions[i].data = data;
+				}
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(variants);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getActionsByVariantID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    getActionByID(id, cb) {
+		this.POSTDatabase({api: "getActionByID", id: id}, {
+			success: function(data) {
+				let action = new i2Action();
+				action.data = data;
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(action);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getActionByID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+	}
+	
+    getActionsByName(name, cb) {
+		this.POSTDatabase({api: "getActionsByName", name: name}, {
+			success: function(data) {
+				let actions = [];
+				for(var i = 0; i < data.size(); ++i) {
+					actions[i] = new i2Action();
+					actions[i].data = data;
+				}
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(actions);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getActionsByName");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    createNewActionID(cb) {
+		this.POSTDatabase({api: "createNewActionID"}, {
+			success: function(data) {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(data);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot createNewActionID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    saveAction(action, cb) {
+		this.POSTDatabase({api: "saveAction", action: action}, {
+			success: function() {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success();
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot saveAction");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
+    deleteActionByID(id, cb) {
+		this.POSTDatabase({api: "deleteActionByID", id: id}, {
+			success: function(data) {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(data);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot deleteActionByID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
 }
