@@ -48,13 +48,8 @@ export class i2Database {
     getModels(cb) {
 		this.POSTDatabase({api: "getModels"}, {
 			success: function(data) {
-				let models = [];
-				for(var i = 0; i < data.size(); ++i) {
-					models[i] = new i2Model();
-					models[i].data = data;
-				}
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(model);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -74,10 +69,8 @@ export class i2Database {
     getModelByID(id, cb) {
 		this.POSTDatabase({api: "getModelByID", id: id}, {
 			success: function(data) {
-				let model = new i2Model();
-				model.data = data;
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(model);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -97,10 +90,8 @@ export class i2Database {
     getModelByPath(path, cb) {
 		this.POSTDatabase({api: "getModelByPath", path: path}, {
 			success: function(data) {
-				let model = new i2Model();
-				model.data = data;
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(model);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -120,13 +111,8 @@ export class i2Database {
     getModelsByName(name, cb) {
 		this.POSTDatabase({api: "getModelsByName", name: name}, {
 			success: function(data) {
-				let models = [];
-				for(var i = 0; i < data.size(); ++i) {
-					models[i] = new i2Model();
-					models[i].data = data;
-				}
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(model);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -164,11 +150,11 @@ export class i2Database {
 		});
     }
 	
-    saveModel(model, cb) {
-		this.POSTDatabase({api: "saveModel", model: model.data}, {
-			success: function() {
+    saveModel(data, cb) {
+		this.POSTDatabase({api: "saveModel", model: data}, {
+			success: function(data) {
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success();
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -208,9 +194,9 @@ export class i2Database {
 	
     deleteModelByID(id, cb) {
 		this.POSTDatabase({api: "deleteModelByID", id: id}, {
-			success: function(data) {
+			success: function() {
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(data);
+					cb.success();
 				}
 			},
 			error: function(e) {
@@ -232,13 +218,8 @@ export class i2Database {
     getVariantsByModelID(id, cb) {
 		this.POSTDatabase({api: "getVariantsByModelID", id: id}, {
 			success: function(data) {
-				let variants = [];
-				for(var i = 0; i < data.size(); ++i) {
-					variants[i] = new i2Variant();
-					variants[i].data = data;
-				}
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(variants);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -258,10 +239,8 @@ export class i2Database {
     getVariantByID(id, cb) {
 		this.POSTDatabase({api: "getVariantByID", id: id}, {
 			success: function(data) {
-				let variant = new i2Variant();
-				variant.data = data;
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(variant);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -281,13 +260,8 @@ export class i2Database {
     getVariantsByName(name, cb) {
 		this.POSTDatabase({api: "getVariantsByName", name: name}, {
 			success: function(data) {
-				let variants = [];
-				for(var i = 0; i < data.size(); ++i) {
-					variants[i] = new i2Variant();
-					variants[i].data = data;
-				}
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(variants);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -327,9 +301,9 @@ export class i2Database {
 	
     saveVariant(variant, cb) {
 		this.POSTDatabase({api: "saveVariant", variant: variant.data}, {
-			success: function() {
+			success: function(data) {
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success();
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -348,9 +322,9 @@ export class i2Database {
 	
     deleteVariantByID(id, cb) {
 		this.POSTDatabase({api: "deleteVariantByID", id: id}, {
-			success: function(data) {
+			success: function() {
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(data);
+					cb.success();
 				}
 			},
 			error: function(e) {
@@ -372,13 +346,8 @@ export class i2Database {
     getActionsByVariantID(id, cb) {
 		this.POSTDatabase({api: "getActionsByVariantID", id: id}, {
 			success: function(data) {
-				let actions = [];
-				for(var i = 0; i < data.size(); ++i) {
-					actions[i] = new i2Action();
-					actions[i].data = data;
-				}
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(variants);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -398,10 +367,8 @@ export class i2Database {
     getActionByID(id, cb) {
 		this.POSTDatabase({api: "getActionByID", id: id}, {
 			success: function(data) {
-				let action = new i2Action();
-				action.data = data;
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(action);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -421,13 +388,8 @@ export class i2Database {
     getActionsByName(name, cb) {
 		this.POSTDatabase({api: "getActionsByName", name: name}, {
 			success: function(data) {
-				let actions = [];
-				for(var i = 0; i < data.size(); ++i) {
-					actions[i] = new i2Action();
-					actions[i].data = data;
-				}
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(actions);
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -467,9 +429,9 @@ export class i2Database {
 	
     saveAction(action, cb) {
 		this.POSTDatabase({api: "saveAction", action: action.data}, {
-			success: function() {
+			success: function(data) {
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success();
+					cb.success(data);
 				}
 			},
 			error: function(e) {
@@ -488,9 +450,9 @@ export class i2Database {
 	
     deleteActionByID(id, cb) {
 		this.POSTDatabase({api: "deleteActionByID", id: id}, {
-			success: function(data) {
+			success: function() {
 				if(cb !== undefined && cb.success !== undefined) {
-					cb.success(data);
+					cb.success();
 				}
 			},
 			error: function(e) {

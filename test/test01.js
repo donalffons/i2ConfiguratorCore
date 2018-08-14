@@ -1,13 +1,14 @@
 "use strict";
 
 import i2Model from "../src/i2Model.js";
-/*
-export class i2Model extends i2DatabaseObject{
-    constructor(name) {
-        super();
-        this.data = [];
-        this.data.name = (name === undefined) ? "" : name;
-    }
-}*/
+import i2ModelFactory from "../src/i2ModelFactory.js";
 
-let test = new i2Model("kark");
+i2ModelFactory.createNewModel(function(testmodel) {
+    testmodel.setName("Hallo Welt");
+    testmodel.save(function(){
+        alert(JSON.stringify(testmodel));
+        testmodel.delete(function(){
+            alert(JSON.stringify(testmodel));
+        });
+    });
+});
