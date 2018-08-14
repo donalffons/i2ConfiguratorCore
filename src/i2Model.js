@@ -2,6 +2,7 @@
 
 import i2DatabaseObject from "./i2DatabaseObject.js";
 import i2DatabaseDefault from "./i2Database.js";
+import i2VariantBuilder from "./i2VariantBuilder.js";
 
 export default class i2Model extends i2DatabaseObject {
     constructor() {
@@ -16,6 +17,8 @@ export default class i2Model extends i2DatabaseObject {
     setName(name) { this.data.name = name;}
     getName() {return this.data.name; }
 
+    getPath() {return this.data.path; }
+
     save(cb) {
         i2DatabaseDefault.saveModel(this.data, {success: (data) => {
             this.data = data;
@@ -28,5 +31,8 @@ export default class i2Model extends i2DatabaseObject {
             if(cb !== undefined) { cb(); }
         }});
     }
-    
+
+    get3DFiles(cb) { i2DatabaseDefault.get3DFilesByModelID(this.data.id, {success: cb}); }
+
+    getVariants(cb) { i2VariantBuilder.getVariantsByModelID(this.data.id, cb); }
 }

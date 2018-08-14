@@ -1,9 +1,9 @@
 "use strict";
 
 import i2Model from "../src/i2Model.js";
-import i2ModelFactory from "../src/i2ModelFactory.js";
+import i2ModelBuilder from "../src/i2ModelBuilder.js";
 
-i2ModelFactory.createNewModel(function(testmodel) {
+i2ModelBuilder.createNewModel(function(testmodel) {
     testmodel.setName("Hallo Welt");
     testmodel.save(function(){
         alert(JSON.stringify(testmodel));
