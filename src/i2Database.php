@@ -34,9 +34,7 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2models WHERE id = " . $id);
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
-        if(count($models) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No model found with id " . $id . ".", E_USER_ERROR);
-        } else if(count($models) > 1) {
+        if(count($models) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one model found with id " . $id . ".", E_USER_ERROR);
         }
         return $models[0];
@@ -54,9 +52,7 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2models WHERE path = '" . $path . "'");
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
-        if(count($models) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No model found with path " . $path . ".", E_USER_ERROR);
-        } else if(count($models) > 1) {
+        if(count($models) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one model found with path " . $path . ".", E_USER_ERROR);
         }
         return $models[0];
@@ -73,10 +69,7 @@ if(isset($_POST["api"])) {
         
         $result = $conn->query("SELECT * FROM i2models WHERE name = '" . $name . "'");
         $models = $result->fetch_all(MYSQLI_ASSOC);
-
-        if(count($models) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No model found with path " . $path . ".", E_USER_ERROR);
-        }
+        
         return $models;
     }
     if($_POST["api"] == "getModelsByName") {
