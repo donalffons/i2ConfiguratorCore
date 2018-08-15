@@ -17,16 +17,13 @@ exports.allTests = async function(test){
     page.on("pageerror", function(err) { console.log("browser page error: " + err.toString()); test.ok(false); });
     page.on("error", function(err) { console.log("browser error: " + err.toString()); test.ok(false); });
     page.on("response", function(response) { console.log("server response: " + response._status); test.ok(response._status <= 400, "server/client error"); });
+    page.on('console', function(msg) { console.log('browser console: ', msg.text()); if(msg.type() == "error") { test.ok(false); } });
     
     async function testFinished() {
         return new Promise(function(resolve, reject) {
             page.on('console', function(msg) {
-                console.log('browser console: ', msg.text());
                 if(msg.text() == "---TEST FINISHED---") {
                     resolve();
-                }
-                if(msg.type() == "error") {
-                    test.ok(false);
                 }
             });
         });
