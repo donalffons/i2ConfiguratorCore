@@ -2,7 +2,6 @@
 
 const puppeteer = require('puppeteer');
 const delay = require('delay');
-var deferred = require('deferred');
 
 exports.allTests = async function(test){
     test.equals(1, 1, "Dummy test");
