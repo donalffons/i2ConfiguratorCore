@@ -2,6 +2,7 @@
 
 const puppeteer = require('puppeteer');
 const delay = require('delay');
+var deferred = require('deferred');
 
 exports.allTests = async function(test){
     test.equals(1, 1, "Dummy test");
@@ -14,11 +15,22 @@ exports.allTests = async function(test){
     const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox']});
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(1000*60*5);
-    page.on('console', function(msg) { console.log('browser console: ', msg.text()); });
     page.on("pageerror", function(err) { console.log("browser page error: " + err.toString()); test.ok(false); });
     page.on("error", function(err) { console.log("browser error: " + err.toString()); test.ok(false); });
     page.on("response", function(response) { console.log("server response: " + response._status); test.ok(response._status <= 400, "server/client error"); });
-    await page.goto('http://127.0.0.1:3000/test/test01.html', {waitUntil: 'networkidle2'});
+    
+    async function testFinished() {
+        return new Promise(function(resolve, reject) {
+            page.on('console', function(msg) {
+                console.log('browser console: ', msg.text());
+                if(msg.text() == "---TEST FINISHED---") {
+                    resolve();
+                }
+            });
+        });
+    }
+    await page.goto('http://127.0.0.1:3000/test/test01.html', {waitUntil: 'load'});
+    await testFinished();
 
     await console.log("-----Finish Testing-----\n");
     await browser.close();
