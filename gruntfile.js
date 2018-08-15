@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     nodeunit: {
-      all: ['tests/alltests.js']
+      all: ['test/alltests.js']
     },
     php: {
         test: {

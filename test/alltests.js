@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 const delay = require('delay');
 
 exports.allTests = async function(test){
-    test.equals(1, 5, "Dummy test");
+    test.equals(1, 1, "Dummy test");
     process.on('unhandledRejection', up => { throw up });
 
     console.log("Waiting 3 seconds for server to load up...\n");
