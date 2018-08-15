@@ -14,7 +14,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
-  grunt.loadNpmTasks('grunt-php');
+  //grunt.loadNpmTasks('grunt-php');
 
-  grunt.registerTask('default', ['php:test', 'nodeunit']);
+  grunt.registerTask('default', [/*'php:test', */'nodeunit']);
 };
