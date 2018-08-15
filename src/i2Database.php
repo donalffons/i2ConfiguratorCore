@@ -155,10 +155,8 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2models WHERE id = " . $id);
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
-        if(count($models) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No model found with id " . $model["id"] . ".", E_USER_ERROR);
-        } else if(count($models) > 1) {
-            trigger_error("API: " . __FUNCTION__ . ": More than one model found with id " . $model["id"] . ".", E_USER_ERROR);
+        if(count($models) > 1) {
+            trigger_error("API: " . __FUNCTION__ . ": More than one model found with id " . $id . ".", E_USER_ERROR);
         }
 
         $result = $conn->query("DELETE FROM `i2models` WHERE id='" . $id . "'");
