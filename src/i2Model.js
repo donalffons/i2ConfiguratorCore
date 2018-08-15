@@ -19,20 +19,32 @@ export default class i2Model extends i2DatabaseObject {
 
     getPath() {return this.data.path; }
 
-    save(cb) {
-        i2DatabaseDefault.saveModel(this.data, {success: (data) => {
-            this.data = data;
-            if(cb !== undefined) { cb(); }
-        }});
+    async save() {
+        let promise = new Promise((resolve, reject) => {
+            i2DatabaseDefault.saveModel(this.data, {success: (data) => {
+                this.data = data;
+                resolve();
+            }});
+        });
+        return promise;
     }
-    delete(cb) {
-        i2DatabaseDefault.deleteModelByID(this.data.id, {success: () => {
-            delete this.data;
-            if(cb !== undefined) { cb(); }
-        }});
+    async delete() {
+        let promise = new Promise((resolve, reject) => {
+            i2DatabaseDefault.deleteModelByID(this.data.id, {success: () => {
+                delete this.data;
+                resolve();
+            }});
+        });
     }
 
-    get3DFiles(cb) { i2DatabaseDefault.get3DFilesByModelID(this.data.id, {success: cb}); }
+    async get3DFiles() {
+        let promise = new Promise((resolve, reject) => {
+            i2DatabaseDefault.get3DFilesByModelID(this.data.id, {success: (data) => {
+                resolve(data);                
+            }});
+        });
+        return promise;
+    }
 
-    getVariants(cb) { i2VariantBuilder.getVariantsByModelID(this.data.id, cb); }
+    getVariants() { return i2VariantBuilder.getVariantsByModelID(this.data.id); }
 }

@@ -1,18 +1,20 @@
 "use strict";
 
+import i2Model from "./../src/i2Model.js";
 import i2ModelBuilder from "../src/i2ModelBuilder.js";
 
-console.log("creating new model");
-i2ModelBuilder.createNewModel(function(testmodel) {
+async function test() {
+    console.log("creating new model");
+    var testmodel = await i2ModelBuilder.createNewModel();
     testmodel.setName("Hallo Welt");
     console.log("model: " + JSON.stringify(testmodel));
     console.log("saving model");
-    testmodel.save(function(){
-        console.log("model: " + JSON.stringify(testmodel));
-        console.log("deleting model");
-        testmodel.delete(function(){
-            console.log("model: " + JSON.stringify(testmodel));
-            console.log("---TEST FINISHED---")
-        });
-    });
-});
+    await testmodel.save();
+    console.log("model: " + JSON.stringify(testmodel));
+    console.log("deleting model");
+    await testmodel.delete();
+    console.log("model: " + JSON.stringify(testmodel));
+    console.log("---TEST FINISHED---")
+}
+
+test();
