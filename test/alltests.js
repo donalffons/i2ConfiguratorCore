@@ -3,7 +3,8 @@
 const puppeteer = require('puppeteer');
 const delay = require('delay');
 
-exports.testAdding = async function(test){
+exports.allTests = async function(test){
+    test.equals(1, 5, "Dummy test");
     process.on('unhandledRejection', up => { throw up });
 
     console.log("Waiting 3 seconds for server to load up...\n");
