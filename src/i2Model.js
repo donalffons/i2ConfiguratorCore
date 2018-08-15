@@ -10,6 +10,7 @@ export default class i2Model extends i2DatabaseObject {
         this.data = {};
         this.data.id = null;
         this.data.name = null
+        this.data.path = null
     }
     setID(id) { this.data.id = id; }
     getID() { return this.data.id; }
@@ -24,7 +25,7 @@ export default class i2Model extends i2DatabaseObject {
             i2DatabaseDefault.saveModel(this.data, {success: (data) => {
                 this.data = data;
                 resolve();
-            }});
+            }, error: function(e) {reject(e);}});
         });
         return promise;
     }
@@ -33,15 +34,16 @@ export default class i2Model extends i2DatabaseObject {
             i2DatabaseDefault.deleteModelByID(this.data.id, {success: () => {
                 delete this.data;
                 resolve();
-            }});
+            }, error: function(e) {reject(e);}});
         });
+        return promise;
     }
 
     async get3DFiles() {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.get3DFilesByModelID(this.data.id, {success: (data) => {
                 resolve(data);                
-            }});
+            }, error: function(e) {reject(e);}});
         });
         return promise;
     }
