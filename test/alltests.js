@@ -11,7 +11,7 @@ exports.allTests = async function(test){
     await delay(3000);
     console.log('Continuing...\n');
 
-    const browser = await puppeteer.launch({headless: true});
+    const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox']});
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(1000*60*5);
     page.on('console', function(msg) { console.log('browser console: ', msg.text()); });
