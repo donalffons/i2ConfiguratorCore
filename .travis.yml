@@ -8,29 +8,19 @@ node_js:
 
 matrix:
  include:
-  - name: 'NodeJS latest / PHP 5.6'
-    env: CHANGEPHPENV=5.6
-  - name: 'NodeJS latest / PHP 5.6.32'
-    env: CHANGEPHPENV=5.6.32
-  - name: 'NodeJS latest / PHP 7.0'
-    env: CHANGEPHPENV=7.0
-  - name: 'NodeJS latest / PHP 7.0.25'
-    env: CHANGEPHPENV=7.0.25
   - name: 'NodeJS latest / PHP 7.1'
     env: CHANGEPHPENV=7.1
-  - name: 'NodeJS latest / PHP 7.1.11'
-    env: CHANGEPHPENV=7.1.11
 
 before_install:
+ - sudo apt-add-repository ppa:ondrej/php -y
  - sudo apt-get update
  # install LAMP
  - sudo apt-get install apache2
- - sudo sed -i -- 's/\/var\/www\/html/\/home\/travis\/donalffons\/i2ConfiguratorCore/g' /etc/apache2/sites-available/000-default.conf # serve this repo
- - echo $TRAVIS_BUILD_DIR
+ - sudo sed -i -- "s~/var/www/html~$TRAVIS_BUILD_DIR~g" /etc/apache2/sites-available/000-default.conf # serve this repo
  - f=$TRAVIS_BUILD_DIR
  - while [[ $f != / ]]; do sudo chmod o+x "$f"; f=$(dirname "$f"); done;
  - sudo /bin/su -c "printf '\n<Directory />\nRequire all granted\n</Directory>\n' >> /etc/apache2/apache2.conf"
- - sudo apt-get install php5
+ - sudo apt-get install php7.1-mysql
  - sudo service apache2 restart
  # install headless chrome dependencies
  - sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget 
@@ -39,7 +29,6 @@ before_install:
  - npm i -g npm@v6.2
 
 before_script:
- - npm install --save-dev grunt-php
  - npm install grunt-cli -g
  - npm install puppeteer
  - npm install delay
@@ -53,10 +42,10 @@ script:
 # > docker run --name build001 -dit travisci/ci-garnet:packer-1515445631-7dfb2e1 /sbin/init
 # > docker exec -it build001 bash -l
 # # su - travis
-# # git clone --depth=50 --branch=dev https://github.com/donalffons/i2ConfiguratorCore.git donalffons/i2ConfiguratorCore
-# # cd donalffons/i2ConfiguratorCore
+# # git clone --depth=50 --branch=dev https://github.com/donalffons/i2ConfiguratorCore.git build/donalffons/i2ConfiguratorCore
+# # cd build/donalffons/i2ConfiguratorCore
 # # export CHANGEPHPENV=5.6
 # # export PATH=./node_modules/.bin:$PATH
 # # nvm install node
-# # TRAVIS_BUILD_DIR=
+# # TRAVIS_BUILD_DIR=/home/travis/build/donalffons/i2ConfiguratorCore
 # GOTO before_install

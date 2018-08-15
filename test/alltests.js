@@ -29,7 +29,7 @@ exports.allTests = async function(test){
             });
         });
     }
-    await page.goto('http://127.0.0.1:3000/test/test01.html', {waitUntil: 'load'});
+    await page.goto('http://localhost/test/test01.html', {waitUntil: 'load'});
     await testFinished();
 
     await console.log("-----Finish Testing-----\n");
