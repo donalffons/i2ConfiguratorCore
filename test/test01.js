@@ -1,7 +1,9 @@
 "use strict";
 
-import i2Model from "./../src/i2Model.js";
 import i2ModelBuilder from "../src/i2ModelBuilder.js";
+
+// Test 01
+// create new model, save, delete
 
 async function test() {
     console.log("creating new model");

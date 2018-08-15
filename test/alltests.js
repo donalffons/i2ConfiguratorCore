@@ -44,6 +44,11 @@ exports.allTests = async function(test){
     await testFinished();
     await console.log("---Finished Test: test01---\n");
 
+    await console.log("---Starting Test: test02---\n");
+    await page.goto('http://localhost/test/test02.html', {waitUntil: 'load'});
+    await testFinished();
+    await console.log("---Finished Test: test02---\n");
+
     await console.log("---Finished all tests---\n");
     await browser.close();
     test.done();
