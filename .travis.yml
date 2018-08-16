@@ -36,15 +36,3 @@ before_script:
 script:
  - php --version
  - grunt
-
-# Locally:
-# > docker run --name build001 -dit travisci/ci-garnet:packer-1515445631-7dfb2e1 /sbin/init
-# > docker exec -it build001 bash -l
-# # su - travis
-# # git clone --depth=50 --branch=dev https://github.com/donalffons/i2ConfiguratorCore.git build/donalffons/i2ConfiguratorCore
-# # cd build/donalffons/i2ConfiguratorCore
-# # export CHANGEPHPENV=7.1
-# # export PATH=./node_modules/.bin:$PATH
-# # nvm install node
-# # TRAVIS_BUILD_DIR=/home/travis/build/donalffons/i2ConfiguratorCore
-# GOTO before_install
