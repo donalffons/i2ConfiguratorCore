@@ -36,6 +36,8 @@ if(isset($_POST["api"])) {
 
         if(count($models) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one model found with id " . $id . ".", E_USER_ERROR);
+        } else if(count($models) == 0) {
+            return $models;
         }
         return $models[0];
     }
@@ -54,6 +56,8 @@ if(isset($_POST["api"])) {
 
         if(count($models) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one model found with path " . $path . ".", E_USER_ERROR);
+        } else if(count($models) == 0) {
+            return $models;
         }
         return $models[0];
     }
