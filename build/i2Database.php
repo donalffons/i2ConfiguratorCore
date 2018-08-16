@@ -59,7 +59,7 @@ if(isset($_POST["api"])) {
     }
     if($_POST["api"] == "getModelByPath") {
         if(!isset($_POST["path"])) {
-            trigger_error("API: " . __FUNCTION__ . ": No path parameter specified.", E_USER_ERROR);
+            $_POST["path"] = "";
         }
         echo json_encode(getModelByPath($_POST["path"]));
     }
