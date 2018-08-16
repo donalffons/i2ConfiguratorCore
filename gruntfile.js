@@ -5,9 +5,8 @@ module.exports = function(grunt) {
     },
     uglify: {
       my_target: {
-        files: {
-          'build/i2ConfiguratorCore.min.js': ['src/i2Action.js', 'src/i2Database.js']
-        }
+        src: 'src/**/*.js',
+        dest: 'build/i2ConfiguratorCore.min.js'
       },
       options: {
         mangle: {
