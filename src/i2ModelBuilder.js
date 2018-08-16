@@ -4,7 +4,7 @@ import i2DatabaseDefault from "./i2Database.js";
 import i2Model from "./i2Model.js";
 
 export default class i2ModelBuilder {
-    static async createNewModel() {
+    static createNewModel() {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.createNewModelID({success: function(id) {
                 let newModel = new i2Model();
@@ -15,7 +15,7 @@ export default class i2ModelBuilder {
         return promise;
     }
 
-    static async getModelByID(id) {
+    static getModelByID(id) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelByID(id, {success: function(data) {
                 let newModel = new i2Model();
@@ -26,7 +26,7 @@ export default class i2ModelBuilder {
         return promise;
     }
 
-    static async getModelByByPath(path) {
+    static getModelByByPath(path) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelByPath(path, {success: function(data) {
                 let newModel = new i2Model();
@@ -37,7 +37,7 @@ export default class i2ModelBuilder {
         return promise;
     }
 
-    static async getModelsByName(name) {
+    static getModelsByName(name) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelsByName(name, {success: function(data) {
                 let newModels = [];
