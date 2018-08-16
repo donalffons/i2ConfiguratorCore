@@ -29,12 +29,14 @@ async function test() {
     await m2.delete();
     await m3.delete();
     console.log("Get all models with name 'Model'");
-    var models = await i2ModelBuilder.getModelsByName("Model");
-    console.log(models.length + " models found.");
-    if(models.length != 0) {
-        console.error("number of models should be 0, but it is " + models.length + "!");
-    }
-    console.log("---TEST FINISHED---")
+    var modelsPromise = i2ModelBuilder.getModelsByName("Model");
+    modelsPromise.then((models) => {
+        console.error("Promise has not been rejected, " + models.length + " models have been found");
+        console.log("---TEST FINISHED---")
+    }, () => {
+        console.log("No models found.");
+        console.log("---TEST FINISHED---")
+    })
 }
 
 test();
