@@ -35,7 +35,7 @@ exports.allTests = async function(test){
     console.log(bodyHTML);
     await console.log("---Finished Test: testphpinfo---\n");
 
-    for(let i = 0; i <= 6; i++) {
+    for(let i = 1; i <= 6; i++) {
         let testid = i.toString().padStart(2, 0);
         await console.log("---Starting Test: test" + testid + "---\n");
         await page.goto('http://localhost/test/test' + testid + '.html', {waitUntil: 'load'});
