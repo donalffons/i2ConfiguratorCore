@@ -15,7 +15,7 @@ async function test() {
         console.error("did not return correct model name");
     }
     console.log("Get Model by path");
-    var m1ByPath = await i2ModelBuilder.getModelByByPath(m1.getPath());
+    var m1ByPath = await i2ModelBuilder.getModelByPath(m1.getPath());
     console.log("model name: " + m1ByPath.getName());
     if(m1ByPath.getName() != "Model") {
         console.error("did not return correct model name");

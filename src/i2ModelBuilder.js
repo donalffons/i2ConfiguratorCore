@@ -23,7 +23,7 @@ class i2ModelBuilder {
         return promise;
     }
 
-    static getModelByByPath(path) {
+    static getModelByPath(path) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelByPath(path, {success: function(data) {
                 let newModel = new i2Model();
