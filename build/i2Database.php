@@ -230,10 +230,10 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2variants WHERE id = " . $id);
         $variants = $result->fetch_all(MYSQLI_ASSOC);
 
-        if(count($variants) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No variant found with id " . $id . ".", E_USER_ERROR);
-        } else if(count($variants) > 1) {
+        if(count($variants) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one variant found with id " . $id . ".", E_USER_ERROR);
+        } else if(count($variants) == 0) {
+            return $variants;
         }
         $variants[0]["idmodel"] = json_decode($variants[0]["idmodel"]);
         return $variants[0];
@@ -250,10 +250,6 @@ if(isset($_POST["api"])) {
 
         $result = $conn->query("SELECT * FROM i2variants WHERE name = " . $name);
         $variants = $result->fetch_all(MYSQLI_ASSOC);
-
-        if(count($variants) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No variant found with name " . $name . ".", E_USER_ERROR);
-        }
 
         foreach($variants as $variant) {
             $variant["idmodel"] = json_decode($variant["idmodel"]);
@@ -374,10 +370,10 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2actions WHERE id = " . $id);
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
-        if(count($actions) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No actions found with id " . $id . ".", E_USER_ERROR);
-        } else if(count($actions) > 1) {
+        if(count($actions) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one actions found with id " . $id . ".", E_USER_ERROR);
+        } else if(count($actions) == 0) {
+            return $actions;
         }
         $actions[0]["idvariant"] = json_decode($actions[0]["idvariant"]);
         return $actions[0];
@@ -395,9 +391,6 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2actions WHERE name = " . $name);
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
-        if(count($actions) == 0) {
-            trigger_error("API: " . __FUNCTION__ . ": No action found with name " . $name . ".", E_USER_ERROR);
-        }
         foreach($actions as $action) {
             $action["idvariant"] = json_decode($action["idvariant"]);
         }
