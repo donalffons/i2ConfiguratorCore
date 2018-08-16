@@ -1,7 +1,5 @@
 "use strict";
 
-import i2ModelBuilder from "../src/i2ModelBuilder.js";
-
 // Test 01
 // create new model, save, delete
 

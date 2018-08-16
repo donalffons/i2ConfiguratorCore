@@ -1,7 +1,5 @@
 "use strict";
 
-import i2ModelBuilder from "../src/i2ModelBuilder.js";
-
 // Test 02
 // create multiple new models, get by name, delete all
 

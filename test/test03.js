@@ -1,7 +1,5 @@
 "use strict";
 
-import i2ModelBuilder from "../src/i2ModelBuilder.js";
-
 // Test 03
 // create new model, get by id, get by path, delete, delete the same model multiple times
 

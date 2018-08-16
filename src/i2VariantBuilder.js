@@ -1,9 +1,6 @@
 "use strict";
 
-import i2DatabaseDefault from "./i2Database.js";
-import i2Variant from "./i2Variant.js";
-
-export default class i2VariantBuilder {
+class i2VariantBuilder {
     static createNewVariant() {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.createNewVariantID({success: function(id) {

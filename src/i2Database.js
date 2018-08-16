@@ -3,13 +3,7 @@
 let scriptFile = document.getElementsByTagName('script')[document.getElementsByTagName('script').length-1].src;
 let scriptDir = scriptFile.substring(0,scriptFile.lastIndexOf("/")+1);
 
-import * as importJQuery from 'https://code.jquery.com/jquery-3.3.1.js';
-$ = window.$;
-//import {i2Model} from './i2Model.js';
-//import {i2Variant} from './i2Variant.js';
-//import {i2Action} from './i2Action.js';
-
-export class i2Database {
+class i2Database {
     constructor() {
 		this.PHPFile = scriptDir+"/../../src/i2Database.php";
 	}
@@ -471,4 +465,3 @@ export class i2Database {
 }
 
 let i2DatabaseDefault = new i2Database();
-export default i2DatabaseDefault;

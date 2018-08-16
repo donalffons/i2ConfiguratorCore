@@ -1,9 +1,5 @@
 "use strict";
 
-import i2ModelBuilder from "../src/i2ModelBuilder.js";
-import i2VariantBuilder from "../src/i2VariantBuilder.js";
-import i2ActionBuilder from "../src/i2ActionBuilder.js";
-
 // Test 06
 // create new model, create new variant, create 2 actions, get all actions of variant 1, delete model
 

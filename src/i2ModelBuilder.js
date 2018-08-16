@@ -1,9 +1,6 @@
 "use strict";
 
-import i2DatabaseDefault from "./i2Database.js";
-import i2Model from "./i2Model.js";
-
-export default class i2ModelBuilder {
+class i2ModelBuilder {
     static createNewModel() {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.createNewModelID({success: function(id) {

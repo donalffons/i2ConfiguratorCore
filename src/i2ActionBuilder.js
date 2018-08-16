@@ -1,9 +1,6 @@
 "use strict";
 
-import i2DatabaseDefault from "./i2Database.js";
-import i2Action from "./i2Action.js";
-
-export default class i2ActionBuilder {
+class i2ActionBuilder {
     static createNewAction() {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.createNewActionID({success: function(id) {

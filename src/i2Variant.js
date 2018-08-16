@@ -1,10 +1,6 @@
 "use strict";
 
-import i2DatabaseObject from "./i2DatabaseObject.js";
-import i2DatabaseDefault from "./i2Database.js";
-import i2ActionBuilder from "./i2ActionBuilder.js";
-
-export default class i2Variant extends i2DatabaseObject{
+class i2Variant extends i2DatabaseObject{
     constructor(executor) {
         super(executor);
         this.data = {};

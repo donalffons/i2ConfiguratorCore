@@ -1,8 +1,5 @@
 "use strict";
 
-import i2ModelBuilder from "../src/i2ModelBuilder.js";
-import i2VariantBuilder from "../src/i2VariantBuilder.js";
-
 // Test 04
 // create new model, create new variant and attach to model, remove from model, delete both
 
