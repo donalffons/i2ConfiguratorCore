@@ -18,8 +18,21 @@ export default class i2Variant extends i2DatabaseObject{
     setName(name) { this.data.name = name; }
     getName() {return this.data.name; }
 
-    setModelIDs(ids){ this.data.idmodel = ids; }
-    getModelIDs(){ return this.data.idmodel; }
+    setModelIDs(ids) { this.data.idmodel = ids; }
+    getModelIDs() { return this.data.idmodel; }
+    addModelID(id) {
+        if (this.data.idmodel.indexOf(id) > -1) {
+            return;
+        }
+        this.data.idmodel[this.data.idmodel.length] = id;
+    }
+    removeModelID(id) {
+        var index = this.data.idmodel.indexOf(id);
+        if (index > -1) {
+            this.data.idmodel.splice(index, 1);
+        }
+    }
+    
 
     async save() {
         let promise = new Promise((resolve, reject) => {
