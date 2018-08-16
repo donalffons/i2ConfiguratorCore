@@ -18,6 +18,7 @@
     "grunt-php": "^1.5.1"
   },
   "devDependencies": {
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify-es": "^3.3.0"
   }
 }

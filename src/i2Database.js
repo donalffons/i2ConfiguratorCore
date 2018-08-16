@@ -5,7 +5,7 @@ let scriptDir = scriptFile.substring(0,scriptFile.lastIndexOf("/")+1);
 
 class i2Database {
     constructor() {
-		this.PHPFile = scriptDir+"/../../src/i2Database.php";
+		this.PHPFile = scriptDir+"i2Database.php";
 	}
 	
 	POSTDatabase(data, cb) {
