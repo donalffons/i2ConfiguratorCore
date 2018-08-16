@@ -162,7 +162,7 @@ if(isset($_POST["api"])) {
         $result = $conn->query("DELETE FROM `i2models` WHERE id='" . $id . "'");
 
         // Check and delete associated variants
-        $resultVariants = $conn->query("SELECT * FROM i2variants WHERE idmodel REGEXP '\\b" . $id . "\\b'");
+        $resultVariants = $conn->query("SELECT * FROM i2variants WHERE idmodel REGEXP '\"" . $id . "\"'");
         $variants = $resultVariants->fetch_all(MYSQLI_ASSOC);
         foreach($variants as $variant) {
             // Remove model id entry from variant row
@@ -175,14 +175,14 @@ if(isset($_POST["api"])) {
                 $conn->query("DELETE FROM `i2variants` WHERE id='" . $variant["id"] . "'");
 
                 // Check and delete associated actions
-                $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\\b" . $variant["id"] . "\\b'");
+                $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $variant["id"] . "\"'");
                 $actions = $resultActions->fetch_all(MYSQLI_ASSOC);
                 foreach($actions as $action) {
                     // Remove variant id entry from action row
                     $jsonVariantID = json_decode($action["idvariant"]);
                     $posVariant = array_search($variant["id"], $jsonVariantID);
                     unset($jsonVariantID[$posVariant]);
-                    $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . $variant["idvariant"] . "'");
+                    $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . $action["idvariant"] . "'");
                     // Action has no more variants associated, deleting...
                     if(count($jsonVariantID) < 1) {
                         $conn->query("DELETE FROM `i2actions` WHERE id = '" . $variant["id"] . "'");
@@ -321,7 +321,7 @@ if(isset($_POST["api"])) {
         $result = $conn->query("DELETE FROM `i2variants` WHERE id='" . $id . "'");
 
         // Check and delete associated actions
-        $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\\b" . $id . "\\b'");
+        $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $id . "\"'");
         $actions = $resultActions->fetch_all(MYSQLI_ASSOC);
         foreach($actions as $action) {
             // Remove variant id entry from action row
@@ -349,7 +349,7 @@ if(isset($_POST["api"])) {
     function getActionsByVariantID($id) {
         $conn = $GLOBALS['conn'];
 
-        $result = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\\b" . $id . "\\b'");
+        $result = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $id . "\"'");
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach($actions as $action) {

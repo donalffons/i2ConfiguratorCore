@@ -3,7 +3,7 @@
 import i2ModelBuilder from "../src/i2ModelBuilder.js";
 import i2VariantBuilder from "../src/i2VariantBuilder.js";
 
-// Test 04
+// Test 05
 // create new model, Create 2 variants and attach to model, get variants by model Id
 
 async function test() {
@@ -18,7 +18,7 @@ async function test() {
     v1.addModelID(m1.getID());
     await v1.save();
     var v2 = await i2VariantBuilder.createNewVariant();
-    v2.setName("Variant1");
+    v2.setName("Variant2");
     v2.addModelID(m1.getID());
     await v2.save();
 
@@ -31,8 +31,6 @@ async function test() {
 
     console.log("cleaning up");
     await m1.delete();
-    await v1.delete();
-    await v2.delete();
     console.log("---TEST FINISHED---")
 }
 
