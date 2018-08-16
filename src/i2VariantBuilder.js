@@ -15,6 +15,9 @@ class i2VariantBuilder {
     static getVariantsByModelID(id) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getVariantsByModelID(id, {success: function(data) {
+                if(data.length == 0) {
+                    reject();
+                }
                 let variants = [];
                 for(let i = 0; i < data.length; i++) {
                     variants[i] = new i2Variant();
@@ -29,6 +32,9 @@ class i2VariantBuilder {
     static getVariantsByName(name) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getVariantsByName(name, {success: function(data) {
+                if(data.length == 0) {
+                    reject();
+                }
                 let variants = [];
                 for(let i = 0; i < data.length; i++) {
                     variants[i] = new i2Variant();
@@ -43,6 +49,9 @@ class i2VariantBuilder {
     static getVariantByID(id) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getVariantByID(id, {success: function(data) {
+                if(data.length == 0) {
+                    reject();
+                }
                 let variant = new i2Variant();
                 variant.data = data;
                 resolve(variant);

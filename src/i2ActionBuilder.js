@@ -15,6 +15,9 @@ class i2ActionBuilder {
     static getActionsByVariantID(id) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getActionsByVariantID(id, {success: function(data) {
+                if(data.length == 0) {
+                    reject();
+                }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
                     actions[i] = new i2Action();
@@ -29,6 +32,9 @@ class i2ActionBuilder {
     static getActionsByName(name) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getActionsByName(name, {success: function(data) {
+                if(data.length == 0) {
+                    reject();
+                }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
                     actions[i] = new i2Action();
@@ -43,6 +49,9 @@ class i2ActionBuilder {
     static getActionByID(id) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getActionByID(id, {success: function(data) {
+                if(data.length == 0) {
+                    reject();
+                }
                 let action = new i2Action();
                 action.data = data;
                 resolve(action);

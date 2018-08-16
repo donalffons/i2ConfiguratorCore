@@ -10,10 +10,9 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        mangle: {
-        },
-        compress: {
-        }
+        mangle: true,
+        compress: true,
+        beautify: false
       }
     },
     copy: {
