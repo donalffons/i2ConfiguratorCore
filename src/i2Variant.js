@@ -33,7 +33,6 @@ export default class i2Variant extends i2DatabaseObject{
         }
     }
     
-
     async save() {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.saveVariant(this.data, {success: (data) => {

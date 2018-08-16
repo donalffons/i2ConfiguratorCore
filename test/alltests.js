@@ -35,15 +35,13 @@ exports.allTests = async function(test){
     console.log(bodyHTML);
     await console.log("---Finished Test: testphpinfo---\n");
 
-    await console.log("---Starting Test: test01---\n");
-    await page.goto('http://localhost/test/test01.html', {waitUntil: 'load'});
-    await testFinished();
-    await console.log("---Finished Test: test01---\n");
-
-    await console.log("---Starting Test: test02---\n");
-    await page.goto('http://localhost/test/test02.html', {waitUntil: 'load'});
-    await testFinished();
-    await console.log("---Finished Test: test02---\n");
+    for(let i = 0; i <= 6; i++) {
+        let testid = i.toString().padStart(2, 0);
+        await console.log("---Starting Test: test" + testid + "---\n");
+        await page.goto('http://localhost/test/test' + testid + '.html', {waitUntil: 'load'});
+        await testFinished();
+        await console.log("---Finished Test: test" + testid + "---\n");
+    }
 
     await console.log("---Finished all tests---\n");
     await browser.close();
