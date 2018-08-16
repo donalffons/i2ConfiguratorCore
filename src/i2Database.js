@@ -300,7 +300,7 @@ export class i2Database {
     }
 	
     saveVariant(variant, cb) {
-		this.POSTDatabase({api: "saveVariant", variant: variant.data}, {
+		this.POSTDatabase({api: "saveVariant", variant: variant}, {
 			success: function(data) {
 				if(cb !== undefined && cb.success !== undefined) {
 					cb.success(data);
@@ -428,7 +428,7 @@ export class i2Database {
     }
 	
     saveAction(action, cb) {
-		this.POSTDatabase({api: "saveAction", action: action.data}, {
+		this.POSTDatabase({api: "saveAction", action: action}, {
 			success: function(data) {
 				if(cb !== undefined && cb.success !== undefined) {
 					cb.success(data);
