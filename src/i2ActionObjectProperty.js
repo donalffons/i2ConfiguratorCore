@@ -3,7 +3,7 @@
 class i2ActionObjectProperty extends i2Action {
     constructor() {
         super();
-        setType("i2ActionObjectProperty");
+        this.setType("i2ActionObjectProperty");
         this.objectsSelector = null;
         this.property = null;
         this.value = null;
@@ -11,18 +11,18 @@ class i2ActionObjectProperty extends i2Action {
 
     updateAction() {
         this.data.action = JSON.stringify({
-            objectSelector: this.objectsSelector,
+            objectSelector: this.objectsSelector.getSelectorString(),
             property: this.property,
-            value: this.value
+            value: this.value != null ? this.value.getValueString() : null
         });
     }
     
-    setObjectsSelector(sel) { this.objectsSelector = sel; updateAction(); }
+    setObjectsSelector(sel) { this.objectsSelector = sel; this.updateAction(); }
     getObjectsSelector() { return this.objectsSelector; }
 
-    setProperty(prop) { this.property = prop; updateAction(); }
+    setProperty(prop) { this.property = prop; this.updateAction(); }
     getProperty() { return this.property; }
 
-    setValue(value) { this.value = value; updateAction(); }
+    setValue(value) { this.value = value; this.updateAction(); }
     getValue() { return this.value; }
 }

@@ -1,10 +1,13 @@
 "use strict";
 
 class i2Value {
-    constructor() {
+    constructor(object) {
         this.valueString = "";
+        if(object !== undefined) {
+            this.setValue(object);
+        }
     }
-    setValue(Object) { this.valueString = JSON.stringify(Object); }
+    setValue(object) { this.valueString = JSON.stringify(object); }
     getValue() { return JSON.parse(this.valueString); }
 
     setValueString(str) { this.valueString = str; }

@@ -1,9 +1,12 @@
 "use strict";
 
 class i2ObjectsHierarchySelector extends i2Selector {
-    constructor(sceneRoot) {
+    constructor(sceneRoot, objects) {
         super();
         this.sceneRoot = sceneRoot;
+        if(objects !== undefined) {
+            this.setFromObjects(objects);
+        }
     }
     
     setFromObjects(objects) {
@@ -13,15 +16,15 @@ class i2ObjectsHierarchySelector extends i2Selector {
             let hierarchyUp = [];
             while(currObject !== undefined && currObject != null) {
                 hierarchyUp.push(currObject.name);
-                currObject = object.parent;
+                currObject = currObject.parent;
             }
             hierarchies.push(hierarchyUp.reverse());
         });
-        selectorString = JSON.stringify(hierarchies);
+        this.selectorString = JSON.stringify(hierarchies);
     }
 
     getObjects() {
-        selectors = JSON.parse(this.selectorString);
+        let selectors = JSON.parse(this.selectorString);
         let objects = [];
         selectors.forEach((selector) => {
             let currObject = this.sceneRoot;

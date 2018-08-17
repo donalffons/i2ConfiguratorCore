@@ -1,10 +1,22 @@
 "use strict";
 
+class i2ActionFactory {
+    static instantiate(type){
+        switch(type) {
+            case "i2ActionObjectProperty":
+                return new i2ActionObjectProperty();
+            case "i2Action":
+            default:
+                return new i2Action();
+        }
+    }
+}
+
 class i2ActionBuilder {
-    static createNewAction() {
+    static createNewAction(type) {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.createNewActionID({success: function(id) {
-                let newAction = new i2Action();
+                let newAction = i2ActionFactory.instantiate(type);
                 newAction.setID(id);
                 resolve(newAction);
             }, error: function(e) {reject(e);}});
@@ -20,7 +32,7 @@ class i2ActionBuilder {
                 }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
-                    actions[i] = new i2Action();
+                    actions[i] = i2ActionFactory.instantiate(actions[i].data.type);
                     actions[i].data = data[i];
                 }
                 resolve(actions);
@@ -37,7 +49,7 @@ class i2ActionBuilder {
                 }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
-                    actions[i] = new i2Action();
+                    actions[i] = i2ActionFactory.instantiate(actions[i].data.type);
                     actions[i].data = data[i];
                 }
                 resolve(actions);
@@ -52,7 +64,7 @@ class i2ActionBuilder {
                 if(data.length == 0) {
                     reject();
                 }
-                let action = new i2Action();
+                let action = i2ActionFactory.instantiate(action.data.type);
                 action.data = data;
                 resolve(action);
             }, error: function(e) {reject(e);}});
