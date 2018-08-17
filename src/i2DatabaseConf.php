@@ -10,7 +10,7 @@ define('DB_PASSWORD', '');
 define('DB_HOST', 'localhost');
 
 /* MySQL hostname */
-define('MODEL_FOLDER', 'WebGL Models/');
+define('MODEL_FOLDER', '../../WebGL Models/');
 
 ?>
 
