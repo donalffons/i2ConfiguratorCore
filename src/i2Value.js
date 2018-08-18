@@ -2,14 +2,11 @@
 
 class i2Value {
     constructor(object) {
-        this.valueString = "";
+        this.valueData = null;
         if(object !== undefined) {
-            this.setValue(object);
+            this.setValueData(object);
         }
     }
-    setValue(object) { this.valueString = JSON.stringify(object); }
-    getValue() { return JSON.parse(this.valueString); }
-
-    setValueString(str) { this.valueString = str; }
-    getValueString() { return this.valueString; }
+    setValueData(data) { this.valueData = data; }
+    getValueData() { return this.valueData; }
 }

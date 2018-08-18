@@ -2,9 +2,9 @@
 
 class i2Selector {
     constructor() {
-        this.selectorString = null;
+        this.selectorData = null;
     }
 
-    setSelectorString(str) { this.selectorString = str; }
-    getSelectorString() { return this.selectorString; }
+    setSelectorData(data) { this.selectorData = data; }
+    getSelectorData() { return this.selectorData; }
 }

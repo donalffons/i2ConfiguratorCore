@@ -23,13 +23,12 @@ class i2ObjectsHierarchySelector extends i2Selector {
             }
             hierarchies.push(hierarchyUp.reverse());
         });
-        this.selectorString = JSON.stringify(hierarchies);
+        this.selectorData = hierarchies;
     }
 
     getObjects() {
-        let selectors = JSON.parse(this.selectorString);
         let objects = [];
-        selectors.forEach((selector) => {
+        this.selectorData.forEach((selector) => {
             let currObject = this.sceneRoot;
             for(let i = 1; i < selector.length; ++i) {
                 currObject = currObject.children.find((child) => {
