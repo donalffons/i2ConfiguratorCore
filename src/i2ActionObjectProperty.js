@@ -11,7 +11,7 @@ class i2ActionObjectProperty extends i2Action {
 
     updateAction() {
         this.data.action = JSON.stringify({
-            objectSelector: this.objectsSelector.getSelectorString(),
+            objectsSelector: this.objectsSelector.getSelectorString(),
             property: this.property,
             value: this.value != null ? this.value.getValueString() : null
         });

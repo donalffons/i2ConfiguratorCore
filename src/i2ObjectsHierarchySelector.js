@@ -8,6 +8,9 @@ class i2ObjectsHierarchySelector extends i2Selector {
             this.setFromObjects(objects);
         }
     }
+
+    setSceneRoot(sceneRoot) { this.sceneRoot = sceneRoot; }
+    getSceneRoot() { return this.sceneRoot; }
     
     setFromObjects(objects) {
         let hierarchies = [];
@@ -30,7 +33,7 @@ class i2ObjectsHierarchySelector extends i2Selector {
             let currObject = this.sceneRoot;
             for(let i = 1; i < selector.length; ++i) {
                 currObject = currObject.children.find((child) => {
-                    return child.name == selector[i].name;
+                    return child.name == selector[i];
                 })
             }
             objects.push(currObject);
