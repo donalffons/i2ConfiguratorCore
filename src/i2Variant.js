@@ -34,8 +34,8 @@ class i2Variant extends i2DatabaseObject{
     
     async save() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.saveVariant(this.data, {success: (data) => {
-                this.data = data;
+            i2DatabaseDefault.saveVariant(this.getData(), {success: (data) => {
+                this.setData(data);
                 resolve();
             }, error: function(e) {reject(e);}});
         });
@@ -44,7 +44,7 @@ class i2Variant extends i2DatabaseObject{
 
     async delete() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.deleteVariantByID(this.data.id, {success: () => {
+            i2DatabaseDefault.deleteVariantByID(this.getID(), {success: () => {
                 delete this.data;
                 resolve();
             }, error: function(e) {reject(e);}});
@@ -52,5 +52,5 @@ class i2Variant extends i2DatabaseObject{
         return promise;
     }
 
-    getActions() { return i2ActionBuilder.getActionsByVariantID(this.data.id); }
+    getActions() { return i2ActionBuilder.getActionsByVariantID(this.getID()); }
 }

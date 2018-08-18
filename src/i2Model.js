@@ -21,8 +21,8 @@ class i2Model extends i2DatabaseObject {
 
     async save() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.saveModel(this.data, {success: (data) => {
-                this.data = data;
+            i2DatabaseDefault.saveModel(this.getData(), {success: (data) => {
+                this.setData(data);
                 resolve();
             }, error: function(e) {reject(e);}});
         });
@@ -30,7 +30,7 @@ class i2Model extends i2DatabaseObject {
     }
     async delete() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.deleteModelByID(this.data.id, {success: () => {
+            i2DatabaseDefault.deleteModelByID(this.getID(), {success: () => {
                 delete this.data;
                 resolve();
             }, error: function(e) {reject(e);}});
@@ -40,12 +40,12 @@ class i2Model extends i2DatabaseObject {
 
     async get3DFiles() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.get3DFilesByModelID(this.data.id, {success: (data) => {
+            i2DatabaseDefault.get3DFilesByModelID(this.getID(), {success: (data) => {
                 resolve(data);                
             }, error: function(e) {reject(e);}});
         });
         return promise;
     }
 
-    getVariants() { return i2VariantBuilder.getVariantsByModelID(this.data.id); }
+    getVariants() { return i2VariantBuilder.getVariantsByModelID(this.getID()); }
 }

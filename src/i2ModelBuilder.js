@@ -49,7 +49,7 @@ class i2ModelBuilder {
                 let newModels = [];
                 for(let i = 0; i < data.length; ++i) {
                     newModels[i] = new i2Model();
-                    newModels[i].setData(data);
+                    newModels[i].setData(data[i]);
                 }
                 resolve(newModels);
             }, error: function(e) {reject(e);}});

@@ -42,8 +42,8 @@ class i2Action extends i2DatabaseObject{
 
     async save() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.saveAction(this.data, {success: (data) => {
-                this.data = data;
+            i2DatabaseDefault.saveAction(this.getData(), {success: (data) => {
+                this.setData(data);
                 resolve();
             }, error: function(e) {reject(e);}});
         });
@@ -52,7 +52,7 @@ class i2Action extends i2DatabaseObject{
 
     async delete() {
         let promise = new Promise((resolve, reject) => {
-            i2DatabaseDefault.deleteActionByID(this.data.id, {success: () => {
+            i2DatabaseDefault.deleteActionByID(this.getID(), {success: () => {
                 delete this.data;
                 resolve();
             }, error: function(e) {reject(e);}});
