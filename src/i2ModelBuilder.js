@@ -19,7 +19,7 @@ class i2ModelBuilder {
                     reject();
                 }
                 let newModel = new i2Model();
-                newModel.data = data;
+                newModel.setData(data);
                 resolve(newModel);
             }, error: function(e) {reject(e);}});
         });
@@ -33,7 +33,7 @@ class i2ModelBuilder {
                     reject();
                 }
                 let newModel = new i2Model();
-                newModel.data = data;
+                newModel.setData(data);
                 resolve(newModel);
             }, error: function(e) {reject(e);}});
         });
@@ -49,7 +49,7 @@ class i2ModelBuilder {
                 let newModels = [];
                 for(let i = 0; i < data.length; ++i) {
                     newModels[i] = new i2Model();
-                    newModels[i].data = data;
+                    newModels[i].setData(data);
                 }
                 resolve(newModels);
             }, error: function(e) {reject(e);}});

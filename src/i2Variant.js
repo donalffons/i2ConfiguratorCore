@@ -8,6 +8,9 @@ class i2Variant extends i2DatabaseObject{
         this.data.name = null;
         this.data.idmodel = [];
     }
+    setData(data) { this.data = data; }
+    getData() { return this.data; }
+
     setID(id) { this.data.id = id; }
     getID() { return this.data.id; }
 

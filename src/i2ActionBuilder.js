@@ -32,8 +32,8 @@ class i2ActionBuilder {
                 }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
-                    actions[i] = i2ActionFactory.instantiate(actions[i].data.type);
-                    actions[i].data = data[i];
+                    actions[i] = i2ActionFactory.instantiate(data[i].type);
+                    actions[i].setData(data[i]);
                 }
                 resolve(actions);
             }, error: function(e) {reject(e);}});
@@ -49,8 +49,8 @@ class i2ActionBuilder {
                 }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
-                    actions[i] = i2ActionFactory.instantiate(actions[i].data.type);
-                    actions[i].data = data[i];
+                    actions[i] = i2ActionFactory.instantiate(data[i].type);
+                    actions[i].setData(data[i]);
                 }
                 resolve(actions);
             }, error: function(e) {reject(e);}});
@@ -64,8 +64,8 @@ class i2ActionBuilder {
                 if(data.length == 0) {
                     reject();
                 }
-                let action = i2ActionFactory.instantiate(action.data.type);
-                action.data = data;
+                let action = i2ActionFactory.instantiate(data.type);
+                action.setData(data);
                 resolve(action);
             }, error: function(e) {reject(e);}});
         });

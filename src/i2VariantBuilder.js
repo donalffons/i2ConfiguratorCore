@@ -21,7 +21,7 @@ class i2VariantBuilder {
                 let variants = [];
                 for(let i = 0; i < data.length; i++) {
                     variants[i] = new i2Variant();
-                    variants[i].data = data[i];
+                    variants[i].setDat(data);
                 }
                 resolve(variants);
             }, error: function(e) {reject(e);}});
@@ -38,7 +38,7 @@ class i2VariantBuilder {
                 let variants = [];
                 for(let i = 0; i < data.length; i++) {
                     variants[i] = new i2Variant();
-                    variants[i].data = data[i];
+                    variants[i].setData(data);
                 }
                 resolve(variants);
             }, error: function(e) {reject(e);}});
@@ -53,7 +53,7 @@ class i2VariantBuilder {
                     reject();
                 }
                 let variant = new i2Variant();
-                variant.data = data;
+                variant.setData(data);
                 resolve(variant);
             }, error: function(e) {reject(e);}});
         });

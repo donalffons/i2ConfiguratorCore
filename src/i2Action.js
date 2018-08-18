@@ -10,6 +10,9 @@ class i2Action extends i2DatabaseObject{
         this.data.type = null;
         this.data.action = null;
     }
+    setData(data) { this.data = data; }
+    getData() { return this.data; }
+
     setID(id) { this.data.id = id; }
     getID() { return this.data.id; }
 
