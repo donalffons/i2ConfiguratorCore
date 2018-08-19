@@ -17,6 +17,7 @@ class i2VariantBuilder {
             i2DatabaseDefault.getVariantsByModelID(id, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let variants = [];
                 for(let i = 0; i < data.length; i++) {
@@ -34,6 +35,7 @@ class i2VariantBuilder {
             i2DatabaseDefault.getVariantsByName(name, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let variants = [];
                 for(let i = 0; i < data.length; i++) {
@@ -51,6 +53,7 @@ class i2VariantBuilder {
             i2DatabaseDefault.getVariantByID(id, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let variant = new i2Variant();
                 variant.setData(data);

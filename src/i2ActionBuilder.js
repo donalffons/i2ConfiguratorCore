@@ -29,6 +29,7 @@ class i2ActionBuilder {
             i2DatabaseDefault.getActionsByVariantID(id, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
@@ -46,6 +47,7 @@ class i2ActionBuilder {
             i2DatabaseDefault.getActionsByName(name, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let actions = [];
                 for(let i = 0; i < data.length; i++) {
@@ -63,6 +65,7 @@ class i2ActionBuilder {
             i2DatabaseDefault.getActionByID(id, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let action = i2ActionFactory.instantiate(data.type);
                 action.setData(data);

@@ -17,6 +17,7 @@ class i2ModelBuilder {
             i2DatabaseDefault.getModelByID(id, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let newModel = new i2Model();
                 newModel.setData(data);
@@ -31,6 +32,7 @@ class i2ModelBuilder {
             i2DatabaseDefault.getModelByPath(path, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let newModel = new i2Model();
                 newModel.setData(data);
@@ -45,6 +47,7 @@ class i2ModelBuilder {
             i2DatabaseDefault.getModelsByName(name, {success: function(data) {
                 if(data.length == 0) {
                     reject();
+                    return;
                 }
                 let newModels = [];
                 for(let i = 0; i < data.length; ++i) {
