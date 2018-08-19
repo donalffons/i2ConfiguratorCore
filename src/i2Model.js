@@ -7,8 +7,9 @@ class i2Model extends i2DatabaseObject {
         this.data.id = null;
         this.data.name = null
         this.data.path = null
+        this.data.tags = {};
     }
-    setData(data) { this.data = data; }
+    setData(data) { this.data = data; if(this.data.tags === undefined) { this.data.tags = {}; }}
     getData() { return this.data; }
     
     setID(id) { this.data.id = id; }
@@ -18,6 +19,11 @@ class i2Model extends i2DatabaseObject {
     getName() {return this.data.name; }
 
     getPath() {return this.data.path; }
+
+    setTags(tags) { this.data.tags = tags; }
+    getTags() { return this.data.tags; }
+    addTag(tagname, tagvalue) { this.data.tags[tagname] = tagvalue; }
+    removeTag(tagname) { delete this.data.tags[tagname]; }
 
     async save() {
         let promise = new Promise((resolve, reject) => {
