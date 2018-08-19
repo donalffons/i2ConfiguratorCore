@@ -3,20 +3,9 @@
 class i2Variant extends i2DatabaseObject{
     constructor(executor) {
         super(executor);
-        this.data = {};
-        this.data.id = null;
-        this.data.name = null;
         this.data.idmodel = [];
     }
-    setData(data) { this.data = data; }
-    getData() { return this.data; }
-
-    setID(id) { this.data.id = id; }
-    getID() { return this.data.id; }
-
-    setName(name) { this.data.name = name; }
-    getName() {return this.data.name; }
-
+    
     setModelIDs(ids) { this.data.idmodel = ids; }
     getModelIDs() { return this.data.idmodel; }
     addModelID(id) {

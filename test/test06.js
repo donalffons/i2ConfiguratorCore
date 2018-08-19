@@ -17,10 +17,12 @@ async function test() {
 
     console.log("Creating and adding 2 actions: 'Action1/2'");
     var a1 = await i2ActionBuilder.createNewAction();
+    console.log("ID :" + a1.getID());
     a1.setName("Action1");
     a1.addVariantID(v1.getID());
     await a1.save();
     var a2 = await i2ActionBuilder.createNewAction();
+    console.log("ID :" + a2.getID());
     a2.setName("Action2");
     a2.addVariantID(v1.getID());
     await a2.save();
