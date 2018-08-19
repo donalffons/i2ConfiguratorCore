@@ -121,6 +121,7 @@ if(isset($_POST["api"])) {
 
         $result = $conn->query("UPDATE `i2models` SET `name` = '" . $model["name"] . "', `path` = '" . $model["id"] ." - " . $model["name"] . "' WHERE `id` = " . $model["id"]);
 
+        // add set tags
         if(isset($model["tags"])) {
             if(!is_array($model["tags"])) {
                 trigger_error("API: " . __FUNCTION__ . ": Property 'tags' was set, but it is not an array.", E_USER_ERROR);
@@ -135,6 +136,7 @@ if(isset($_POST["api"])) {
             }
         }
         
+        // remove unset tags
         $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_%'");
         $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
         foreach($tagcolumns as $tagcolumn) {
@@ -240,6 +242,16 @@ if(isset($_POST["api"])) {
                         $conn->query("DELETE FROM `i2actions` WHERE id = '" . $variant["id"] . "'");
                     }
                 }
+            }
+        }
+
+        // delete tag columns with no tags
+        $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_%'");
+        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
+        foreach($tagcolumns as $tagcolumn) {
+            $result = $conn->query("SELECT * FROM `i2models` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
+            if($result->num_rows == 0) {
+                $result = $conn->query("ALTER TABLE `i2models` DROP `" . $tagcolumn["Field"] . "`");
             }
         }
 
