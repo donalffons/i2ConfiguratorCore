@@ -15,18 +15,7 @@ if(isset($_POST["api"])) {
     $result = $conn->query("CREATE TABLE IF NOT EXISTS `i2actions` ( `id` INT NOT NULL AUTO_INCREMENT , `idvariant` TEXT NOT NULL, `type` TEXT NOT NULL , `action` TEXT NOT NULL , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;");
     header("Content-type: text/html;charset=utf-8");
 
-    // Model Functions
-
-    function getModels() {
-        $conn = $GLOBALS['conn'];
-
-        $result = $conn->query("SELECT * FROM i2models");
-        $models = $result->fetch_all(MYSQLI_ASSOC);
-        return $models;
-    }
-    if($_POST["api"] == "getModels") {
-        echo json_encode(getModels());
-    }
+    // Helper Functions
 
     function makeTagArray($items) {
         foreach($items as &$item) {
@@ -39,6 +28,73 @@ if(isset($_POST["api"])) {
             }
         }
         return $items;
+    }
+
+    function saveTags($dbname, $model) {
+        $conn = $GLOBALS['conn'];
+
+        // add set tags
+        if(isset($model["tags"])) {
+            if(!is_array($model["tags"])) {
+                trigger_error("API: " . __FUNCTION__ . ": Property 'tags' was set, but it is not an array.", E_USER_ERROR);
+            }
+            foreach ($model["tags"] as $tagname => $tagvalue) {
+                $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_" . $tagname ."'");
+                $columns = $result->fetch_all(MYSQLI_ASSOC);
+                if(count($columns) == 0) {
+                    $result = $conn->query("ALTER TABLE `" . $dbname . "` ADD `tag_" . $tagname . "` TEXT NULL DEFAULT NULL");
+                }
+                $result = $conn->query("UPDATE `" . $dbname . "` SET `tag_" . $tagname . "` = '" . $tagvalue . "' WHERE `id` = " . $model["id"]);
+            }
+        }
+        
+        // remove unset tags
+        $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_%'");
+        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
+        foreach($tagcolumns as $tagcolumn) {
+            $isInNewTagArray = false;
+            if(isset($model["tags"])) {
+                foreach($model["tags"] as $newTagName => $newTagValue) {
+                    if("tag_" . $newTagName == $tagcolumn["Field"]) {
+                        $isInNewTagArray = true;
+                    }
+                }
+            }
+            if(!$isInNewTagArray) {
+                $result = $conn->query("UPDATE `" . $dbname . "` SET `". $tagcolumn["Field"] . "` = NULL");
+            }
+
+            $result = $conn->query("SELECT * FROM `" . $dbname . "` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
+            if($result->num_rows == 0) {
+                $result = $conn->query("ALTER TABLE `" . $dbname . "` DROP `" . $tagcolumn["Field"] . "`");
+            }
+        }
+    }
+
+    function deleteEmptyTagColumns($dbname) {
+        $conn = $GLOBALS['conn'];
+        
+        $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_%'");
+        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
+        foreach($tagcolumns as $tagcolumn) {
+            $result = $conn->query("SELECT * FROM `" . $dbname . "` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
+            if($result->num_rows == 0) {
+                $result = $conn->query("ALTER TABLE `" . $dbname . "` DROP `" . $tagcolumn["Field"] . "`");
+            }
+        }
+    }
+
+    // Model Functions
+
+    function getModels() {
+        $conn = $GLOBALS['conn'];
+
+        $result = $conn->query("SELECT * FROM i2models");
+        $models = $result->fetch_all(MYSQLI_ASSOC);
+        return $models;
+    }
+    if($_POST["api"] == "getModels") {
+        echo json_encode(getModels());
     }
 
     function getModelByID($id) {
@@ -120,43 +176,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2models` SET `name` = '" . $model["name"] . "', `path` = '" . $model["id"] ." - " . $model["name"] . "' WHERE `id` = " . $model["id"]);
-
-        // add set tags
-        if(isset($model["tags"])) {
-            if(!is_array($model["tags"])) {
-                trigger_error("API: " . __FUNCTION__ . ": Property 'tags' was set, but it is not an array.", E_USER_ERROR);
-            }
-            foreach ($model["tags"] as $tagname => $tagvalue) {
-                $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_" . $tagname ."'");
-                $columns = $result->fetch_all(MYSQLI_ASSOC);
-                if(count($columns) == 0) {
-                    $result = $conn->query("ALTER TABLE `i2models` ADD `tag_" . $tagname . "` TEXT NULL DEFAULT NULL");
-                }
-                $result = $conn->query("UPDATE `i2models` SET `tag_" . $tagname . "` = '" . $tagvalue . "' WHERE `id` = " . $model["id"]);
-            }
-        }
-        
-        // remove unset tags
-        $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_%'");
-        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
-        foreach($tagcolumns as $tagcolumn) {
-            $isInNewTagArray = false;
-            if(isset($model["tags"])) {
-                foreach($model["tags"] as $newTagName => $newTagValue) {
-                    if("tag_" . $newTagName == $tagcolumn["Field"]) {
-                        $isInNewTagArray = true;
-                    }
-                }
-            }
-            if(!$isInNewTagArray) {
-                $result = $conn->query("UPDATE `i2models` SET `". $tagcolumn["Field"] . "` = NULL");
-            }
-
-            $result = $conn->query("SELECT * FROM `i2models` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
-            if($result->num_rows == 0) {
-                $result = $conn->query("ALTER TABLE `i2models` DROP `" . $tagcolumn["Field"] . "`");
-            }
-        }
+        saveTags("i2Models", $model);
 
         return getModelByID($model["id"]);
     }
@@ -245,15 +265,7 @@ if(isset($_POST["api"])) {
             }
         }
 
-        // delete tag columns with no tags
-        $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_%'");
-        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
-        foreach($tagcolumns as $tagcolumn) {
-            $result = $conn->query("SELECT * FROM `i2models` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
-            if($result->num_rows == 0) {
-                $result = $conn->query("ALTER TABLE `i2models` DROP `" . $tagcolumn["Field"] . "`");
-            }
-        }
+        deleteEmptyTagColumns("i2Models");
 
         return "";
     }
