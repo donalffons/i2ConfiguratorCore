@@ -251,18 +251,14 @@ if(isset($_POST["api"])) {
                 // Check and delete associated actions
                 $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $variant["id"] . "\"'");
                 $actions = $resultActions->fetch_all(MYSQLI_ASSOC);
-                error_log("checking actions");
                 foreach($actions as $action) {
-                    error_log("action: " . json_encode($action));
                     // Remove variant id entry from action row
                     $jsonVariantID = json_decode($action["idvariant"]);
                     $posVariant = array_search($variant["id"], $jsonVariantID);
                     unset($jsonVariantID[$posVariant]);
                     $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . $action["idvariant"] . "'");
                     // Action has no more variants associated, deleting...
-                    error_log("jsonVariantID: " . json_encode($jsonVariantID));
                     if(count($jsonVariantID) < 1) {
-                        error_log("DELETE FROM `i2actions` WHERE id = '" . $action["id"] . "'");
                         $conn->query("DELETE FROM `i2actions` WHERE id = '" . $action["id"] . "'");
                     }
                 }
