@@ -15,6 +15,75 @@ if(isset($_POST["api"])) {
     $result = $conn->query("CREATE TABLE IF NOT EXISTS `i2actions` ( `id` INT NOT NULL AUTO_INCREMENT , `idvariant` TEXT NOT NULL, `type` TEXT NOT NULL , `action` TEXT NOT NULL , `name` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;");
     header("Content-type: text/html;charset=utf-8");
 
+    // Helper Functions
+
+    function makeTagArray($items) {
+        foreach($items as &$item) {
+            foreach($item as $key => $value) {
+                if(substr($key, 0, 4) == "tag_") {
+                    $tagname = substr($key, 4);
+                    $item["tags"][$tagname] = $value;
+                    unset($item[$key]);
+                }
+            }
+        }
+        return $items;
+    }
+
+    function saveTags($dbname, $model) {
+        $conn = $GLOBALS['conn'];
+
+        // add set tags
+        if(isset($model["tags"])) {
+            if(!is_array($model["tags"])) {
+                trigger_error("API: " . __FUNCTION__ . ": Property 'tags' was set, but it is not an array.", E_USER_ERROR);
+            }
+            foreach ($model["tags"] as $tagname => $tagvalue) {
+                $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_" . $tagname ."'");
+                $columns = $result->fetch_all(MYSQLI_ASSOC);
+                if(count($columns) == 0) {
+                    $result = $conn->query("ALTER TABLE `" . $dbname . "` ADD `tag_" . $tagname . "` TEXT NULL DEFAULT NULL");
+                }
+                $result = $conn->query("UPDATE `" . $dbname . "` SET `tag_" . $tagname . "` = '" . $tagvalue . "' WHERE `id` = " . $model["id"]);
+            }
+        }
+        
+        // remove unset tags
+        $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_%'");
+        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
+        foreach($tagcolumns as $tagcolumn) {
+            $isInNewTagArray = false;
+            if(isset($model["tags"])) {
+                foreach($model["tags"] as $newTagName => $newTagValue) {
+                    if("tag_" . $newTagName == $tagcolumn["Field"]) {
+                        $isInNewTagArray = true;
+                    }
+                }
+            }
+            if(!$isInNewTagArray) {
+                $result = $conn->query("UPDATE `" . $dbname . "` SET `". $tagcolumn["Field"] . "` = NULL");
+            }
+
+            $result = $conn->query("SELECT * FROM `" . $dbname . "` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
+            if($result->num_rows == 0) {
+                $result = $conn->query("ALTER TABLE `" . $dbname . "` DROP `" . $tagcolumn["Field"] . "`");
+            }
+        }
+    }
+
+    function deleteEmptyTagColumns($dbname) {
+        $conn = $GLOBALS['conn'];
+
+        $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_%'");
+        $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
+        foreach($tagcolumns as $tagcolumn) {
+            $result = $conn->query("SELECT * FROM `" . $dbname . "` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
+            if($result->num_rows == 0) {
+                $result = $conn->query("ALTER TABLE `" . $dbname . "` DROP `" . $tagcolumn["Field"] . "`");
+            }
+        }
+    }
+
     // Model Functions
 
     function getModels() {
@@ -39,7 +108,7 @@ if(isset($_POST["api"])) {
         } else if(count($models) == 0) {
             return $models;
         }
-        return $models[0];
+        return makeTagArray($models)[0];
     }
     if($_POST["api"] == "getModelByID") {
         if(!isset($_POST["id"])) {
@@ -59,7 +128,7 @@ if(isset($_POST["api"])) {
         } else if(count($models) == 0) {
             return $models;
         }
-        return $models[0];
+        return makeTagArray($models)[0];
     }
     if($_POST["api"] == "getModelByPath") {
         if(!isset($_POST["path"])) {
@@ -74,7 +143,7 @@ if(isset($_POST["api"])) {
         $result = $conn->query("SELECT * FROM i2models WHERE name = '" . $name . "'");
         $models = $result->fetch_all(MYSQLI_ASSOC);
         
-        return $models;
+        return makeTagArray($models);
     }
     if($_POST["api"] == "getModelsByName") {
         if(!isset($_POST["name"])) {
@@ -107,6 +176,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2models` SET `name` = '" . $model["name"] . "', `path` = '" . $model["id"] ." - " . $model["name"] . "' WHERE `id` = " . $model["id"]);
+        saveTags("i2Models", $model);
 
         return getModelByID($model["id"]);
     }
@@ -195,6 +265,8 @@ if(isset($_POST["api"])) {
             }
         }
 
+        deleteEmptyTagColumns("i2Models");
+
         return "";
     }
     if($_POST["api"] == "deleteModelByID") {
@@ -202,6 +274,30 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": No id parameter specified.", E_USER_ERROR);
         }
         echo json_encode(deleteModelByID($_POST["id"]));
+    }
+
+    function getModelsByTag($tagname, $tagvalue) {
+        $conn = $GLOBALS['conn'];
+        
+        $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_" . $tagname ."'");
+        $columns = $result->fetch_all(MYSQLI_ASSOC);
+        if(count($columns) == 0) {
+            return $columns;
+        }
+        
+        $result = $conn->query("SELECT * FROM i2models WHERE `tag_" . $tagname . "` = '" . $tagvalue . "'");
+        $models = $result->fetch_all(MYSQLI_ASSOC);
+        
+        return $models;
+    }
+    if($_POST["api"] == "getModelsByTag") {
+        if(!isset($_POST["tagname"])) {
+            trigger_error("API: " . __FUNCTION__ . ": No tagname parameter specified.", E_USER_ERROR);
+        }
+        if(!isset($_POST["tagvalue"])) {
+            trigger_error("API: " . __FUNCTION__ . ": No tagvalue parameter specified.", E_USER_ERROR);
+        }
+        echo json_encode(getModelsByTag($_POST["tagname"], $_POST["tagvalue"]));
     }
 
     // Variant Functions
@@ -215,7 +311,7 @@ if(isset($_POST["api"])) {
         foreach($variants as $variant) {
             $variant["idmodel"] = json_decode($variant["idmodel"]);
         }
-        return $variants;
+        return makeTagArray($variants);
     }
     if($_POST["api"] == "getVariantsByModelID") {
         if(!isset($_POST["id"])) {
@@ -236,7 +332,7 @@ if(isset($_POST["api"])) {
             return $variants;
         }
         $variants[0]["idmodel"] = json_decode($variants[0]["idmodel"]);
-        return $variants[0];
+        return makeTagArray($variants)[0];
     }
     if($_POST["api"] == "getVariantByID") {
         if(!isset($_POST["id"])) {
@@ -254,7 +350,7 @@ if(isset($_POST["api"])) {
         foreach($variants as $variant) {
             $variant["idmodel"] = json_decode($variant["idmodel"]);
         }
-        return $variants;
+        return makeTagArray($variants);
     }
     if($_POST["api"] == "getVariantsByName") {
         if(!isset($_POST["name"])) {
@@ -287,6 +383,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2variants` SET `idmodel` = '" . json_encode($variant["idmodel"]) . "', `name` = '" . $variant["name"] . "' WHERE `id` = " . $variant["id"]);
+        saveTags("i2Variants", $variant);
 
         return getVariantByID($variant["id"]);
     }
@@ -335,6 +432,8 @@ if(isset($_POST["api"])) {
             }
         }
 
+        deleteEmptyTagColumns("i2Variants");
+
         return "";
     }
     if($_POST["api"] == "deleteVariantByID") {
@@ -355,7 +454,7 @@ if(isset($_POST["api"])) {
         foreach($actions as $action) {
             $action["idvariant"] = json_decode($action["idvariant"]);
         }
-        return $actions;
+        return makeTagArray($actions);
     }
     if($_POST["api"] == "getActionsByVariantID") {
         if(!isset($_POST["id"])) {
@@ -376,7 +475,7 @@ if(isset($_POST["api"])) {
             return $actions;
         }
         $actions[0]["idvariant"] = json_decode($actions[0]["idvariant"]);
-        return $actions[0];
+        return makeTagArray($actions)[0];
     }
     if($_POST["api"] == "getActionByID") {
         if(!isset($_POST["id"])) {
@@ -394,7 +493,7 @@ if(isset($_POST["api"])) {
         foreach($actions as $action) {
             $action["idvariant"] = json_decode($action["idvariant"]);
         }
-        return $actions;
+        return makeTagArray($actions);
     }
     if($_POST["api"] == "getActionsByName") {
         if(!isset($_POST["name"])) {
@@ -427,6 +526,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2actions` SET `idvariant` = '" . json_encode($action["idvariant"]) . "', `type` = '" . $action["type"] . "', `action` = '" . $action["action"] . "', `name` = '" . $action["name"] . "' WHERE `id` = " . $action["id"]);
+        saveTags("i2Actions", $model);
 
         return getActionByID($action["id"]);
     }
@@ -465,6 +565,8 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("DELETE FROM `i2actions` WHERE id='" . $id . "'");
+
+        deleteEmptyTagColumns("i2Actions");
 
         return "";
     }
