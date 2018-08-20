@@ -277,7 +277,7 @@ if(isset($_POST["api"])) {
             $jsonModelID = json_decode($variant["idmodel"]);
             $posModel = array_search($id, $jsonModelID);
             unset($jsonModelID[$posModel]);
-            $jsonModelID = array_values(jsonModelID);
+            $jsonModelID = array_values($jsonModelID);
             $conn->query("INSERT INTO `i2variants` (`id`, `idmodel`, `name`) VALUES (" . $variant["id"] . ", '" . json_encode($variant["idmodel"]) . "', '" . $variant["name"] . "') ON DUPLICATE KEY UPDATE idmodel='" . $variant["idmodel"] . "'");
             // Variant has no more models associated, deleting...
             if(count($jsonModelID) < 1) {
