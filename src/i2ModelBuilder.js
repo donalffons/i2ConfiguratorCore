@@ -16,7 +16,7 @@ class i2ModelBuilder {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelByID(id, {success: function(data) {
                 if(data.length == 0) {
-                    reject();
+                    resolve();
                     return;
                 }
                 let newModel = new i2Model();
@@ -31,7 +31,7 @@ class i2ModelBuilder {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelByPath(path, {success: function(data) {
                 if(data.length == 0) {
-                    reject();
+                    resolve();
                     return;
                 }
                 let newModel = new i2Model();
@@ -46,7 +46,7 @@ class i2ModelBuilder {
         let promise = new Promise((resolve, reject) => {
             i2DatabaseDefault.getModelsByName(name, {success: function(data) {
                 if(data.length == 0) {
-                    reject();
+                    resolve();
                     return;
                 }
                 let newModels = [];
