@@ -27,9 +27,15 @@ Then follow instructions in .travis.yml.
 
 ## Class Diagramms
 
-![](https://github.com/donalffons/i2Configurator/blob/master/documentation/i2ConfiguratorCore/Class%20Diagramms.png)
-
-![](https://github.com/donalffons/i2Configurator/blob/master/documentation/i2ConfiguratorCore/Class%20Diagramm-%20I2Database.png?raw=true)
+Overview of all core classes:
+![](/documentation/class%20diagramms.png)
 
 ## Communication Diagramms
-![](https://github.com/donalffons/i2Configurator/blob/master/documentation/i2ConfiguratorCore/Communication%20Diagramms.png)
+creation of a model component (process is analogous for variants and actions):
+![](/documentation/communication%20diagramms%20-%20model%20creation.png)
+
+creation of an i2ActionObjectProperty class (as a prototype for future classes):
+![](/documentation/communication%20diagramms%20-%20i2ActionObjectProperty.png)
+
+## Example Model/Variant/action Hierarchy
++![](/documentation/sample%20class%20hierarchy.png)
