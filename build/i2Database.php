@@ -40,6 +40,9 @@ if(isset($_POST["api"])) {
             }
             foreach ($model["tags"] as $tagname => $tagvalue) {
                 $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_" . $tagname ."'");
+                if(!$result) {
+                    continue;
+                }
                 $columns = $result->fetch_all(MYSQLI_ASSOC);
                 if(count($columns) == 0) {
                     $result = $conn->query("ALTER TABLE `" . $dbname . "` ADD `tag_" . $tagname . "` TEXT NULL DEFAULT NULL");
@@ -50,6 +53,9 @@ if(isset($_POST["api"])) {
         
         // remove unset tags
         $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_%'");
+        if(!$result) {
+            return;
+        }
         $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
         foreach($tagcolumns as $tagcolumn) {
             $isInNewTagArray = false;
@@ -75,6 +81,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SHOW COLUMNS FROM `" . $dbname . "` LIKE 'tag_%'");
+        if(!$result) {
+            return;
+        }
         $tagcolumns = $result->fetch_all(MYSQLI_ASSOC);
         foreach($tagcolumns as $tagcolumn) {
             $result = $conn->query("SELECT * FROM `" . $dbname . "` WHERE `" . $tagcolumn["Field"] ."` IS NOT NULL LIMIT 1");
@@ -90,6 +99,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2models");
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
         return $models;
     }
@@ -101,6 +113,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2models WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($models) > 1) {
@@ -121,6 +136,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2models WHERE path = '" . $path . "'");
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($models) > 1) {
@@ -141,6 +159,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2models WHERE name = '" . $name . "'");
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
         
         return makeTagArray($models);
@@ -167,6 +188,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2models WHERE id = " . $model["id"]);
+        if(!$result) {
+            return;
+        }
         $model_result = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($model_result) == 0) {
@@ -197,6 +221,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2models WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($models) == 0) {
@@ -227,6 +254,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2models WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($models) > 1) {
@@ -237,6 +267,9 @@ if(isset($_POST["api"])) {
 
         // Check and delete associated variants
         $resultVariants = $conn->query("SELECT * FROM i2variants WHERE idmodel REGEXP '\"" . $id . "\"'");
+        if(!$resultVariants) {
+            return;
+        }
         $variants = $resultVariants->fetch_all(MYSQLI_ASSOC);
         foreach($variants as $variant) {
             // Remove model id entry from variant row
@@ -250,6 +283,9 @@ if(isset($_POST["api"])) {
 
                 // Check and delete associated actions
                 $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $variant["id"] . "\"'");
+                if(!$resultActions) {
+                    return;
+                }
                 $actions = $resultActions->fetch_all(MYSQLI_ASSOC);
                 foreach($actions as $action) {
                     // Remove variant id entry from action row
@@ -280,12 +316,18 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SHOW COLUMNS FROM `i2models` LIKE 'tag_" . $tagname ."'");
+        if(!$result) {
+            return;
+        }
         $columns = $result->fetch_all(MYSQLI_ASSOC);
         if(count($columns) == 0) {
             return $columns;
         }
         
         $result = $conn->query("SELECT * FROM i2models WHERE `tag_" . $tagname . "` = '" . $tagvalue . "'");
+        if(!$result) {
+            return;
+        }
         $models = $result->fetch_all(MYSQLI_ASSOC);
         
         return $models;
@@ -306,6 +348,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2variants WHERE idmodel REGEXP '\"" . $id . "\"'");
+        if(!$result) {
+            return;
+        }
         $variants = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach($variants as $variant) {
@@ -324,6 +369,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2variants WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $variants = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($variants) > 1) {
@@ -345,6 +393,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2variants WHERE name = " . $name);
+        if(!$result) {
+            return;
+        }
         $variants = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach($variants as $variant) {
@@ -374,6 +425,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2variants WHERE id = " . $variant["id"]);
+        if(!$result) {
+            return;
+        }
         $variant_res = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($variant_res) == 0) {
@@ -407,6 +461,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2variants WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $variants = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($variants) == 0) {
@@ -419,6 +476,9 @@ if(isset($_POST["api"])) {
 
         // Check and delete associated actions
         $resultActions = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $id . "\"'");
+        if(!$resultActions) {
+            return;
+        }
         $actions = $resultActions->fetch_all(MYSQLI_ASSOC);
         foreach($actions as $action) {
             // Remove variant id entry from action row
@@ -449,6 +509,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2actions WHERE idvariant REGEXP '\"" . $id . "\"'");
+        if(!$result) {
+            return;
+        }
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach($actions as $action) {
@@ -467,6 +530,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2actions WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($actions) > 1) {
@@ -488,6 +554,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
 
         $result = $conn->query("SELECT * FROM i2actions WHERE name = " . $name);
+        if(!$result) {
+            return;
+        }
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
         foreach($actions as $action) {
@@ -517,6 +586,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2actions WHERE id = " . $action["id"]);
+        if(!$result) {
+            return;
+        }
         $action_res = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($action_res) == 0) {
@@ -556,6 +628,9 @@ if(isset($_POST["api"])) {
         $conn = $GLOBALS['conn'];
         
         $result = $conn->query("SELECT * FROM i2actions WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
         if(count($actions) == 0) {
