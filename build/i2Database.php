@@ -353,7 +353,7 @@ if(isset($_POST["api"])) {
         }
         $variants = $result->fetch_all(MYSQLI_ASSOC);
 
-        foreach($variants as $variant) {
+        foreach($variants as &$variant) {
             $variant["idmodel"] = json_decode($variant["idmodel"]);
         }
         return makeTagArray($variants);
@@ -436,6 +436,10 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one variant found with id " . $variant["id"] . ".", E_USER_ERROR);
         }
 
+        if(!isArray($action["idmodel"])) {
+            trigger_error("API: " . __FUNCTION__ . ": id model is not an array.", E_USER_ERROR);
+        }
+
         $result = $conn->query("UPDATE `i2variants` SET `idmodel` = '" . json_encode($variant["idmodel"]) . "', `name` = '" . $variant["name"] . "' WHERE `id` = " . $variant["id"]);
         saveTags("i2Variants", $variant);
 
@@ -514,7 +518,7 @@ if(isset($_POST["api"])) {
         }
         $actions = $result->fetch_all(MYSQLI_ASSOC);
 
-        foreach($actions as $action) {
+        foreach($actions as &$action) {
             $action["idvariant"] = json_decode($action["idvariant"]);
         }
         return makeTagArray($actions);
@@ -595,6 +599,10 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": No action found with id " . $action["id"] . ".", E_USER_ERROR);
         } else if(count($action_res) > 1) {
             trigger_error("API: " . __FUNCTION__ . ": More than one action found with id " . $action["id"] . ".", E_USER_ERROR);
+        }
+
+        if(!is_array($action["idvariant"])) {
+            trigger_error("API: " . __FUNCTION__ . ": id variant is not an array.", E_USER_ERROR);
         }
 
         $result = $conn->query("UPDATE `i2actions` SET `idvariant` = '" . json_encode($action["idvariant"]) . "', `type` = '" . $action["type"] . "', `action` = '" . $action["action"] . "', `name` = '" . $action["name"] . "' WHERE `id` = " . $action["id"]);
