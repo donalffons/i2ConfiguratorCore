@@ -436,8 +436,8 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one variant found with id " . $variant["id"] . ".", E_USER_ERROR);
         }
 
-        if(!is_array($variant["idmodel"])) {
-            trigger_error("API: " . __FUNCTION__ . ": id model is not an array.", E_USER_ERROR);
+        if(!empty($variant["idmodel"]) && !is_array($variant["idmodel"])) {
+            trigger_error("API: " . __FUNCTION__ . ": id model is set but not an array.", E_USER_ERROR);
         }
 
         $result = $conn->query("UPDATE `i2variants` SET `idmodel` = '" . json_encode($variant["idmodel"]) . "', `name` = '" . $variant["name"] . "' WHERE `id` = " . $variant["id"]);
@@ -601,8 +601,8 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one action found with id " . $action["id"] . ".", E_USER_ERROR);
         }
 
-        if(!is_array($action["idvariant"])) {
-            trigger_error("API: " . __FUNCTION__ . ": id variant is not an array.", E_USER_ERROR);
+        if(!empty($action["idvariant"]) && !is_array($action["idvariant"])) {
+            trigger_error("API: " . __FUNCTION__ . ": id variant is set but not an array.", E_USER_ERROR);
         }
 
         $result = $conn->query("UPDATE `i2actions` SET `idvariant` = '" . json_encode($action["idvariant"]) . "', `type` = '" . $action["type"] . "', `action` = '" . $action["action"] . "', `name` = '" . $action["name"] . "' WHERE `id` = " . $action["id"]);
