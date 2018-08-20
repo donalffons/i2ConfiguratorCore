@@ -436,7 +436,7 @@ if(isset($_POST["api"])) {
             trigger_error("API: " . __FUNCTION__ . ": More than one variant found with id " . $variant["id"] . ".", E_USER_ERROR);
         }
 
-        if(!isArray($action["idmodel"])) {
+        if(!is_array($variant["idmodel"])) {
             trigger_error("API: " . __FUNCTION__ . ": id model is not an array.", E_USER_ERROR);
         }
 
