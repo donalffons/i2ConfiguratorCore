@@ -8,7 +8,9 @@ class i2DatabaseObject {
         this.data.tags = {};
     }
     setData(data) { this.data = data; if(this.data.tags === undefined) { this.data.tags = {}; }}
+    setDataClone(data) { this.data = $.extend(true, {}, data); if(this.data.tags === undefined) { this.data.tags = {}; } }
     getData() { return this.data; }
+    getDataClone() { return $.extend(true, {}, this.data); }
     
     setID(id) { this.data.id = id; }
     getID() { return this.data.id; }
