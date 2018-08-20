@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "all": "0.0.0",
     "deferred": "^0.7.9",
     "grunt": "^1.0.3",
     "grunt-contrib-nodeunit": "^2.0.0",
