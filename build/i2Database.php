@@ -24,6 +24,7 @@ if(isset($_POST["api"])) {
                     $tagname = substr($key, 4);
                     $item["tags"][$tagname] = $value;
                     unset($item[$key]);
+                    $items = array_values($items);
                 }
             }
         }
@@ -276,6 +277,7 @@ if(isset($_POST["api"])) {
             $jsonModelID = json_decode($variant["idmodel"]);
             $posModel = array_search($id, $jsonModelID);
             unset($jsonModelID[$posModel]);
+            $jsonModelID = array_values(jsonModelID);
             $conn->query("INSERT INTO `i2variants` (`id`, `idmodel`, `name`) VALUES (" . $variant["id"] . ", '" . json_encode($variant["idmodel"]) . "', '" . $variant["name"] . "') ON DUPLICATE KEY UPDATE idmodel='" . $variant["idmodel"] . "'");
             // Variant has no more models associated, deleting...
             if(count($jsonModelID) < 1) {
@@ -292,7 +294,8 @@ if(isset($_POST["api"])) {
                     $jsonVariantID = json_decode($action["idvariant"]);
                     $posVariant = array_search($variant["id"], $jsonVariantID);
                     unset($jsonVariantID[$posVariant]);
-                    $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . $action["idvariant"] . "'");
+                    $jsonVariantID = array_values($jsonVariantID);
+                    $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . json_encode($action["idvariant"]) . "'");
                     // Action has no more variants associated, deleting...
                     if(count($jsonVariantID) < 1) {
                         $conn->query("DELETE FROM `i2actions` WHERE id = '" . $action["id"] . "'");
@@ -487,12 +490,13 @@ if(isset($_POST["api"])) {
         foreach($actions as $action) {
             // Remove variant id entry from action row
             $jsonVariantID = json_decode($action["idvariant"]);
-            $posVariant = array_search($variant["id"], $jsonVariantID);
+            $posVariant = array_search($id, $jsonVariantID);
             unset($jsonVariantID[$posVariant]);
-            $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . $variant["idvariant"] . "'");
+            $jsonVariantID = array_values($jsonVariantID);
+            $conn->query("INSERT INTO `i2actions` (`id`, `idvariant`, `type`, `action`, `name`) VALUES (" . $action["id"] . ", '" . json_encode($action["idvariant"]) . "', '" . $action["type"] . "', '" . $action["action"] . "', '" . $action["name"] . "') ON DUPLICATE KEY UPDATE idvariant='" . json_encode($jsonVariantID) . "'");
             // Action has no more variants associated, deleting...
             if(count($jsonVariantID) < 1) {
-                $conn->query("DELETE FROM `i2actions` WHERE id = '" . $variant["id"] . "'");
+                $conn->query("DELETE FROM `i2actions` WHERE id = '" . $action["id"] . "'");
             }
         }
 
