@@ -38,4 +38,4 @@ creation of an i2ActionObjectProperty class (as a prototype for future classes):
 ![](/documentation/communication%20diagramms%20-%20i2ActionObjectProperty.png)
 
 ## Example Model/Variant/action Hierarchy
-+![](/documentation/sample%20class%20hierarchy.png)
+![](/documentation/sample%20class%20hierarchy.png)
