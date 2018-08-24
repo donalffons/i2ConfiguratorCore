@@ -3,8 +3,10 @@
 class i2Action extends i2DatabaseObject{
     constructor(executor) {
         super(executor);
+        if(this.getType() === undefined) {
+            this.setType("i2Action");
+        }
         this.data.idvariant = [];
-        this.data.type = null;
         this.data.action = null;
     }
 
