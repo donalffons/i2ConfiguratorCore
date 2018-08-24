@@ -4,10 +4,13 @@ class i2ActionFactory {
     static instantiate(type){
         switch(type) {
             case "i2ActionObjectProperty":
-                return new i2ActionObjectProperty();
+                    return new i2ActionObjectProperty();
+            case "i2ActionAddObject":
+                return new i2ActionAddObject();
             case "i2Action":
-            default:
                 return new i2Action();
+            default:
+                console.error("invalid action type specified");
         }
     }
 }
