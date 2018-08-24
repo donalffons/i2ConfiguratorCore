@@ -6,6 +6,7 @@ class i2ActionAddObject extends i2Action {
         this.setType("i2ActionAddObject");
         this.objectsSelectorParent = null;
         this.value = null;
+        this.onObjectAdded = undefined;
     }
 
     setData(data) {
@@ -31,6 +32,9 @@ class i2ActionAddObject extends i2Action {
     setValue(value) { this.value = value; }
     getValue() { return this.value; }
 
+    setOnObjectAdded(cb) { this.onObjectAdded = cb; }
+    getOnObjectAdded() { return this.onObjectAdded; }
+
     execute() {
         let parent = this.objectsSelectorParent.getObjects();
         if(parent.length != 1) {
@@ -43,11 +47,17 @@ class i2ActionAddObject extends i2Action {
             this.value.getValueData().forEach(element => {
                 loader.parse( element, object => {
                     parent[0].add(object);
+                    if(this.onObjectAdded !== undefined) {
+                        this.onObjectAdded(object);
+                    }
                 });
             });
         } else {
             loader.parse( this.value.getValueData(), object => {
                 parent[0].add(object);
+                if(this.onObjectAdded !== undefined) {
+                    this.onObjectAdded(object);
+                }
             });
         }
     }
