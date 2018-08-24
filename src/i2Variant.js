@@ -45,9 +45,8 @@ class i2Variant extends i2DatabaseObject{
 
     async getActions(forceUpdateFromServer = false) {
         if(this.actions === undefined || forceUpdateFromServer) {
-            console.log("updating from server");
             this.actions = await i2ActionBuilder.getActionsByVariantID(this.getID());
-            if(this.actions == undefined) {
+            if(this.actions === undefined) {
                 this.actions = [];
             }
         }
