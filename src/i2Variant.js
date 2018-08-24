@@ -4,6 +4,8 @@ class i2Variant extends i2DatabaseObject{
     constructor(executor) {
         super(executor);
         this.data.idmodel = [];
+        this.actions = undefined;
+        this.removedActions = [];
     }
     
     setModelIDs(ids) { this.data.idmodel = ids; }
@@ -41,5 +43,42 @@ class i2Variant extends i2DatabaseObject{
         return promise;
     }
 
-    getActions() { return i2ActionBuilder.getActionsByVariantID(this.getID()); }
+    async getActions(forceUpdateFromServer = false) {
+        if(this.actions === undefined || forceUpdateFromServer) {
+            console.log("updating from server");
+            this.actions = await i2ActionBuilder.getActionsByVariantID(this.getID());
+            if(this.actions == undefined) {
+                this.actions = [];
+            }
+        }
+        return this.actions;
+    }
+    async addAction(action) {
+        await this.getActions();
+        this.actions.push(action);
+        action.addVariantID(this.getID());
+    }
+    async removeAction(action) {
+        await this.getActions();
+        let ind = this.actions.find(element => {
+            return element.getID() == action.getID();
+        });
+        this.actions.splice(ind, 1);
+        this.removedActions.push(action);
+
+        action.removeVariantID(this.getID());
+    }
+    async updateActionsOnServer() {
+        await this.getActions();
+        this.actions.forEach(action => {
+            action.save();
+        });
+        this.removedActions.forEach(action => {
+            if(action.getVariantIDs().length == 0) {
+                action.delete();
+            } else {
+                element.save();
+            }
+        });
+    }
 }
