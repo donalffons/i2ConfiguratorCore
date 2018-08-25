@@ -201,7 +201,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2models` SET `name` = '" . $model["name"] . "', `path` = '" . $model["id"] ." - " . $model["name"] . "' WHERE `id` = " . $model["id"]);
-        saveTags("i2Models", $model);
+        saveTags("i2models", $model);
 
         return getModelByID($model["id"]);
     }
@@ -304,7 +304,7 @@ if(isset($_POST["api"])) {
             }
         }
 
-        deleteEmptyTagColumns("i2Models");
+        deleteEmptyTagColumns("i2models");
 
         return "";
     }
@@ -444,7 +444,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2variants` SET `idmodel` = '" . json_encode($variant["idmodel"]) . "', `name` = '" . $variant["name"] . "' WHERE `id` = " . $variant["id"]);
-        saveTags("i2Variants", $variant);
+        saveTags("i2variants", $variant);
 
         return getVariantByID($variant["id"]);
     }
@@ -500,7 +500,7 @@ if(isset($_POST["api"])) {
             }
         }
 
-        deleteEmptyTagColumns("i2Variants");
+        deleteEmptyTagColumns("i2variants");
 
         return "";
     }
@@ -610,7 +610,7 @@ if(isset($_POST["api"])) {
         }
 
         $result = $conn->query("UPDATE `i2actions` SET `idvariant` = '" . json_encode($action["idvariant"]) . "', `type` = '" . $action["type"] . "', `action` = '" . $action["action"] . "', `name` = '" . $action["name"] . "' WHERE `id` = " . $action["id"]);
-        saveTags("i2Actions", $action);
+        saveTags("i2actions", $action);
 
         return getActionByID($action["id"]);
     }
@@ -653,7 +653,7 @@ if(isset($_POST["api"])) {
 
         $result = $conn->query("DELETE FROM `i2actions` WHERE id='" . $id . "'");
 
-        deleteEmptyTagColumns("i2Actions");
+        deleteEmptyTagColumns("i2actions");
 
         return "";
     }
