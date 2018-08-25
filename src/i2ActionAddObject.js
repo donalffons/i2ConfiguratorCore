@@ -21,7 +21,7 @@ class i2ActionAddObject extends i2Action {
     getData() {
         this.data.action = JSON.stringify({
             objectsSelectorParent: this.objectsSelectorParent.getSelectorData(),
-            value: this.value
+            value: this.value.getValueData()
         });
         return super.getData();
     }
