@@ -76,7 +76,7 @@ class i2Variant extends i2DatabaseObject{
             if(action.getVariantIDs().length == 0) {
                 action.delete();
             } else {
-                element.save();
+                action.save();
             }
         });
     }
