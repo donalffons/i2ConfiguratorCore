@@ -3,6 +3,8 @@
 class i2ActionFactory {
     static instantiate(type){
         switch(type) {
+            case "i2ActionMaterialType":
+                    return new i2ActionMaterialType();
             case "i2ActionObjectProperty":
                     return new i2ActionObjectProperty();
             case "i2ActionAddObject":
