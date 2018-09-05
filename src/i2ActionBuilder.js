@@ -9,6 +9,8 @@ class i2ActionFactory {
                     return new i2ActionObjectProperty();
             case "i2ActionAddObject":
                 return new i2ActionAddObject();
+            case "i2ActionMaterialProperty":
+                return new i2ActionMaterialProperty();
             case "i2Action":
                 return new i2Action();
             default:
