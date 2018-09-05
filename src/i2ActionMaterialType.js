@@ -109,6 +109,7 @@ class i2ActionMaterialType extends i2Action {
         material.overrides = prevMaterial.overrides;
         this.updateMaterialSettings(prevMaterial, material);
         this.getMaterialSelector().getMaterialCollection()[material.uuid] = material;
+        delete this.getMaterialSelector().getMaterialCollection()[prevMaterial.uuid];
         this.getSceneRoot().traverse((object)=>{
             if ( Array.isArray( object.material ) ) {
                 object.material.forEach((currMaterial) => {
