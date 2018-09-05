@@ -42,6 +42,10 @@ class i2ActionMaterialProperty extends i2Action {
     execute() {
         let material = this.materialSelector.getMaterial();
         let value = this.value.getValueData();
-        eval("material."+this.property+".copy(value)");
+        if(this.property == "color") {
+            eval("material."+this.property+" = new THREE.Color(value)");
+        } else {
+            eval("material."+this.property+".copy(value)");
+        }
     }
 }
