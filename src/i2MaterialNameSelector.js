@@ -1,7 +1,7 @@
 "use strict";
 
 class i2MaterialNameSelector extends i2Selector {
-    constructor(materialCollection, sceneRoot, material) {
+    constructor(materialCollection, material) {
         super();
         this.materialCollection = materialCollection;
         if(material !== undefined) {
