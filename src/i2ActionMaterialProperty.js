@@ -12,7 +12,9 @@ class i2ActionMaterialProperty extends i2Action {
     setData(data) {
         super.setData(data);
         let actionData = JSON.parse(data.action);
-        this.materialSelector = new i2MaterialNameSelector(null);
+        if(this.materialSelector === undefined || this.materialSelector === null) {
+            this.materialSelector = new i2MaterialNameSelector(null);
+        }
         this.materialSelector.setSelectorData(actionData.materialSelector);
         this.property = actionData.property;
         this.value = new i2Value();
