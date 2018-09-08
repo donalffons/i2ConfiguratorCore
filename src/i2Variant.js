@@ -79,5 +79,6 @@ class i2Variant extends i2DatabaseObject{
                 action.save();
             }
         });
+        this.removedActions = [];
     }
 }
