@@ -59,7 +59,7 @@ class i2Variant extends i2DatabaseObject{
     }
     async removeAction(action) {
         await this.getActions();
-        let ind = this.actions.find(element => {
+        let ind = this.actions.findIndex(element => {
             return element.getID() == action.getID();
         });
         this.actions.splice(ind, 1);
