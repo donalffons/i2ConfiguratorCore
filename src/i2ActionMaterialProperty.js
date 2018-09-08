@@ -39,13 +39,52 @@ class i2ActionMaterialProperty extends i2Action {
     setValue(value) { this.value = value; }
     getValue() { return this.value; }
 
+    initialize(data) {
+        if(data && data.materialSelector) {
+            this.setMaterialSelector(data.materialSelector);
+        }
+        if(data && data.property) {
+            this.setProperty(data.property);
+        }
+        if(data && data.value) {
+            this.setValue(data.value);
+        }
+        if(data && data.tags) {
+            this.setTags(data.tags);
+        }
+
+        let material = this.materialSelector.getMaterial();
+        if(material.userData.overrides === undefined) {
+            material.userData.overrides = {};
+        }
+        if(material.userData.overrides[this.getProperty()] !== undefined) {
+            console.error("another override for this property already exists!");
+            return;
+        }
+        material.userData.overrides[this.getProperty()] = {};
+        material.userData.overrides[this.getProperty()].overridden = false;
+        material.userData.overrides[this.getProperty()].default = (data && data.default) ? data.default : Object.assign({}, material[this.getProperty()]); // shallow clone
+    }
     execute() {
         let material = this.materialSelector.getMaterial();
         let value = this.value.getValueData();
-        if(this.property == "color") {
-            eval("material."+this.property+" = new THREE.Color(value)");
+        if(this.getProperty() == "color") {
+            eval("material."+this.getProperty()+" = new THREE.Color(value)");
         } else {
-            eval("material."+this.property+".copy(value)");
+            eval("material."+this.getProperty()+" = value");
         }
+
+        material.userData.overrides[this.getProperty()].overridden = true;
+    }
+    revert() {
+        let material = this.materialSelector.getMaterial();
+        let defaultValue = material.userData.overrides[this.getProperty()].default;
+        if(this.getProperty() == "color") {
+            eval("material."+this.getProperty()+" = new THREE.Color(defaultValue)");
+        } else {
+            eval("material."+this.getProperty()+" = defaultValue");
+        }
+
+        material.userData.overrides[this.getProperty()].overridden = false;
     }
 }
