@@ -7,6 +7,7 @@ class i2ActionMaterialType extends i2Action {
         this.materialSelector = null;
         this.value = null;
         this.sceneRoot = null;
+        this.overrideName = "materialType";
     }
 
     setData(data) {
@@ -37,10 +38,9 @@ class i2ActionMaterialType extends i2Action {
     setValue(value) { this.value = value; }
     getValue() { return this.value; }
 
-    updateMaterialSettings(prevMaterial, material) {
+    updateMaterialSettings(prevMaterial, material, m) {
 
         /* MeshLambertMaterial MeshPhongMaterial MeshStandardMaterial MeshPhysicalMaterial*/
-        let m = this.getValue().getValueData();
 
         material.name = prevMaterial.name;
         material.color = prevMaterial.color;
@@ -103,11 +103,37 @@ class i2ActionMaterialType extends i2Action {
         material.alphaTest = prevMaterial.alphaTest;
         material.wireframe = prevMaterial.wireframe;
     }
+    initialize(data) {
+        if(data && data.materialSelector) {
+            this.setMaterialSelector(data.materialSelector);
+        }
+        if(data && data.value) {
+            this.setValue(data.value);
+        }
+        if(data && data.tags) {
+            this.setTags(data.tags);
+        }
+        if(data && data.sceneRoot) {
+            this.setSceneRoot(data.sceneRoot);
+        }
+
+        let material = this.materialSelector.getMaterial();
+        if(material.userData.overrides === undefined) {
+            material.userData.overrides = {};
+        }
+        if(material.userData.overrides[this.overrideName] !== undefined) {
+            console.error("another override for this property already exists!");
+            return;
+        }
+        material.userData.overrides[this.overrideName] = {};
+        material.userData.overrides[this.overrideName].overridden = false;
+        material.userData.overrides[this.overrideName].default = material.constructor.name;
+    }
     execute() {
         let prevMaterial = this.getMaterialSelector().getMaterial();
         let material = new THREE[ this.value.getValueData() ]();
-        material.overrides = prevMaterial.overrides;
-        this.updateMaterialSettings(prevMaterial, material);
+        material.userData.overrides = prevMaterial.userData.overrides;
+        this.updateMaterialSettings(prevMaterial, material, this.getValue().getValueData());
         this.getMaterialSelector().getMaterialCollection()[material.uuid] = material;
         delete this.getMaterialSelector().getMaterialCollection()[prevMaterial.uuid];
         this.getSceneRoot().traverse((object)=>{
@@ -118,17 +144,20 @@ class i2ActionMaterialType extends i2Action {
                     }
                 });
             } else {
-                if(object.material !== undefined && object.material.uuid == object.material.uuid) {
+                if(object.material !== undefined && object.material.uuid == prevMaterial.uuid) {
                     object.material = material;
                 }
             }
         });
+
+        material.userData.overrides[this.overrideName].overridden = true;
     }
-    revert(defaultMaterialType) {
+    revert() {
         let prevMaterial = this.getMaterialSelector().getMaterial();
+        let defaultMaterialType = prevMaterial.userData.overrides[this.overrideName].default;
         let material = new THREE[ defaultMaterialType ]();
-        material.overrides = prevMaterial.overrides;
-        this.updateMaterialSettings(prevMaterial, material);
+        material.userData.overrides = prevMaterial.userData.overrides;
+        this.updateMaterialSettings(prevMaterial, material, defaultMaterialType);
         this.getMaterialSelector().getMaterialCollection()[material.uuid] = material;
         this.getSceneRoot().traverse((object)=>{
             if ( Array.isArray( object.material ) ) {
@@ -138,10 +167,12 @@ class i2ActionMaterialType extends i2Action {
                     }
                 });
             } else {
-                if(object.material !== undefined && object.material.uuid == object.material.uuid) {
+                if(object.material !== undefined && object.material.uuid == prevMaterial.uuid) {
                     object.material = material;
                 }
             }
         });
+
+        material.userData.overrides[this.overrideName].overridden = false;
     }
 }
