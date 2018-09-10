@@ -186,6 +186,27 @@ class i2Database {
 		});
     }
 	
+    getImageFilesByModelID(id, cb) {
+		this.POSTDatabase({api: "getImageFilesByModelID", id: id}, {
+			success: function(data) {
+				if(cb !== undefined && cb.success !== undefined) {
+					cb.success(data);
+				}
+			},
+			error: function(e) {
+				if(cb !== undefined && cb.error !== undefined) {
+					cb.error(e);
+				}
+				console.error("Cannot getImageFilesByModelID");
+			},
+			complete: function() {
+				if(cb !== undefined && cb.complete !== undefined) {
+					cb.complete();
+				}
+			}
+		});
+    }
+	
     deleteModelByID(id, cb) {
 		this.POSTDatabase({api: "deleteModelByID", id: id}, {
 			success: function() {

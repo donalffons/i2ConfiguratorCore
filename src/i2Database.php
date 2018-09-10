@@ -251,6 +251,39 @@ if(isset($_POST["api"])) {
         echo json_encode(get3DFilesByModelID($_POST["id"]));
     }
 
+    function getImageFilesByModelID($id) {
+        $conn = $GLOBALS['conn'];
+        
+        $result = $conn->query("SELECT * FROM i2models WHERE id = " . $id);
+        if(!$result) {
+            return;
+        }
+        $models = $result->fetch_all(MYSQLI_ASSOC);
+
+        if(count($models) == 0) {
+            trigger_error("API: " . __FUNCTION__ . ": No model found with id " . $model["id"] . ".", E_USER_ERROR);
+        } else if(count($models) > 1) {
+            trigger_error("API: " . __FUNCTION__ . ": More than one model found with id " . $model["id"] . ".", E_USER_ERROR);
+        }
+
+        $modeldir = MODEL_FOLDER . $models[0]["path"];
+        $allfiles = array_diff(scandir($modeldir), array('.', '..'));
+        $imagefiles = [];
+        foreach($allfiles as $file) {
+            if(in_array(pathinfo($file, PATHINFO_EXTENSION), ["bmp","jpg","jpeg","png","gif","webp"])) {
+                array_push($imagefiles, $file);
+            }
+        }
+
+        return $imagefiles;
+    }
+    if($_POST["api"] == "getImageFilesByModelID") {
+        if(!isset($_POST["id"])) {
+            trigger_error("API: " . __FUNCTION__ . ": No id parameter specified.", E_USER_ERROR);
+        }
+        echo json_encode(getImageFilesByModelID($_POST["id"]));
+    }
+
     function deleteModelByID($id) {
         $conn = $GLOBALS['conn'];
         

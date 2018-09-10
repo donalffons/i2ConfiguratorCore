@@ -63,17 +63,38 @@ class i2ActionMaterialProperty extends i2Action {
         }
         material.userData.overrides[this.getProperty()] = {};
         material.userData.overrides[this.getProperty()].overridden = false;
-        material.userData.overrides[this.getProperty()].default = (data && data.default) ? data.default : Object.assign({}, material[this.getProperty()]); // shallow clone
+
+        if(data && data.default) {
+            material.userData.overrides[this.getProperty()].default = data.default;
+        } else {
+            if(this.getProperty() == "mapImage") {
+                material.userData.overrides[this.getProperty()].default = material.map.image.src;
+            } else {
+                material.userData.overrides[this.getProperty()].default = Object.assign({}, material[this.getProperty()]); // shallow clone
+            }
+        }
     }
     execute() {
         let material = this.materialSelector.getMaterial();
         let value = this.value.getValueData();
         if(this.getProperty() == "color") {
-            eval("material."+this.getProperty()+" = new THREE.Color(value)");
+            material[this.getProperty()] = new THREE.Color(value.r, value.g, value.b);
+        } else if(this.getProperty() == "mapImage") {
+            var loader = new THREE.TextureLoader();
+            loader.load(value, ( texture ) => {
+                    material.map.image = texture.image;
+                    material.map.needsUpdate = true;
+                },
+                // onProgress callback currently not supported
+                undefined,
+                // onError callback
+                function ( err ) { console.error( 'An error happened.' ); }
+            );
         } else {
-            eval("material."+this.getProperty()+" = value");
+             Object.assign(material[this.getProperty()], value);
         }
 
+        material.needsUpdate = true;
         material.userData.overrides[this.getProperty()].overridden = true;
     }
     revert() {
@@ -81,10 +102,22 @@ class i2ActionMaterialProperty extends i2Action {
         let defaultValue = material.userData.overrides[this.getProperty()].default;
         if(this.getProperty() == "color") {
             material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
+        } else if(this.getProperty() == "mapImage") {
+            var loader = new THREE.TextureLoader();
+            loader.load(defaultValue, ( texture ) => {
+                    material.map.image = texture.image;
+                    material.map.needsUpdate = true;
+                },
+                // onProgress callback currently not supported
+                undefined,
+                // onError callback
+                function ( err ) { console.error( 'An error happened.' ); }
+            );
         } else {
-            material[this.getProperty()] = defaultValue;
+            Object.assign(material[this.getProperty()], defaultValue);
         }
 
+        material.needsUpdate = true;
         material.userData.overrides[this.getProperty()].overridden = false;
     }
 }

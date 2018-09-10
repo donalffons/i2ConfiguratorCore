@@ -36,5 +36,14 @@ class i2Model extends i2DatabaseObject {
         return promise;
     }
 
+    async getImageFiles() {
+        let promise = new Promise((resolve, reject) => {
+            i2DatabaseDefault.getImageFilesByModelID(this.getID(), {success: (data) => {
+                resolve(data);                
+            }, error: function(e) {reject(e);}});
+        });
+        return promise;
+    }
+
     getVariants() { return i2VariantBuilder.getVariantsByModelID(this.getID()); }
 }
