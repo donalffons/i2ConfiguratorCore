@@ -80,9 +80,9 @@ class i2ActionMaterialProperty extends i2Action {
         let material = this.materialSelector.getMaterial();
         let defaultValue = material.userData.overrides[this.getProperty()].default;
         if(this.getProperty() == "color") {
-            eval("material."+this.getProperty()+" = new THREE.Color(defaultValue)");
+            material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
         } else {
-            eval("material."+this.getProperty()+" = defaultValue");
+            material[this.getProperty()] = defaultValue;
         }
 
         material.userData.overrides[this.getProperty()].overridden = false;
