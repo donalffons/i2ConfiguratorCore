@@ -74,7 +74,7 @@ class i2ActionMaterialProperty extends i2Action {
     execute() {
         let material = this.getMaterialSelector().getMaterial();
         let value = this.getValue().getValueData();
-        if(this.getProperty() == "color") {
+        if(this.getProperty() == "color" || this.getProperty() == "emissive" || this.getProperty() == "specular") {
             if(typeof value == "string") {
                 material[this.getProperty()] = new THREE.Color(value);
             } else {
@@ -91,7 +91,7 @@ class i2ActionMaterialProperty extends i2Action {
     revert() {
         let material = this.getMaterialSelector().getMaterial();
         let defaultValue = material.userData.overrides[this.getProperty()].default;
-        if(this.getProperty() == "color") {
+        if(this.getProperty() == "color" || this.getProperty() == "emissive" || this.getProperty() == "specular") {
             if(typeof defaultValue == "string") {
                 material[this.getProperty()] = new THREE.Color(defaultValue);
             } else {
