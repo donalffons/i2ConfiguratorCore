@@ -70,7 +70,8 @@ class i2ActionMaterialProperty extends i2Action {
             if(this.getProperty() == "mapImage") {
                 material.userData.overrides[this.getProperty()].default = material.map != null ? material.map.image.src : null;
             } else {
-                material.userData.overrides[this.getProperty()].default = Object.assign({}, material[this.getProperty()]); // shallow clone
+                // legacy: material.userData.overrides[this.getProperty()].default = Object.assign({}, material[this.getProperty()]); // shallow clone
+                material.userData.overrides[this.getProperty()].default = material[this.getProperty()];
             }
         }
     }
