@@ -78,7 +78,11 @@ class i2ActionMaterialProperty extends i2Action {
         let material = this.materialSelector.getMaterial();
         let value = this.value.getValueData();
         if(this.getProperty() == "color") {
-            material[this.getProperty()] = new THREE.Color(value.r, value.g, value.b);
+            if(typeof value == "string") {
+                material[this.getProperty()] = new THREE.Color(value);
+            } else {
+                material[this.getProperty()] = new THREE.Color(value.r, value.g, value.b);
+            }
         } else if(this.getProperty() == "mapImage") {
             if(value != null) {
                 var loader = new THREE.TextureLoader();
@@ -110,7 +114,11 @@ class i2ActionMaterialProperty extends i2Action {
         let material = this.materialSelector.getMaterial();
         let defaultValue = material.userData.overrides[this.getProperty()].default;
         if(this.getProperty() == "color") {
-            material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
+            if(typeof defaultValue == "string") {
+                material[this.getProperty()] = new THREE.Color(defaultValue);
+            } else {
+                material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
+            }
         } else if(this.getProperty() == "mapImage") {
             if(defaultValue != null) {
                 var loader = new THREE.TextureLoader();
