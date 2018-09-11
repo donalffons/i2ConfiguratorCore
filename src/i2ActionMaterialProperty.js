@@ -68,7 +68,7 @@ class i2ActionMaterialProperty extends i2Action {
             material.userData.overrides[this.getProperty()].default = data.default;
         } else {
             if(this.getProperty() == "mapImage") {
-                material.userData.overrides[this.getProperty()].default = material.map.image.src;
+                material.userData.overrides[this.getProperty()].default = material.map != null ? material.map.image.src : null;
             } else {
                 material.userData.overrides[this.getProperty()].default = Object.assign({}, material[this.getProperty()]); // shallow clone
             }
@@ -80,16 +80,25 @@ class i2ActionMaterialProperty extends i2Action {
         if(this.getProperty() == "color") {
             material[this.getProperty()] = new THREE.Color(value.r, value.g, value.b);
         } else if(this.getProperty() == "mapImage") {
-            var loader = new THREE.TextureLoader();
-            loader.load(value, ( texture ) => {
-                    material.map.image = texture.image;
-                    material.map.needsUpdate = true;
-                },
-                // onProgress callback currently not supported
-                undefined,
-                // onError callback
-                function ( err ) { console.error( 'An error happened.' ); }
-            );
+            if(value != null) {
+                var loader = new THREE.TextureLoader();
+                loader.load(value, ( texture ) => {
+                        if(material.map == null) {
+                            material.map = texture;
+                        } else {
+                            material.map.image = texture.image;
+                        }
+                        material.map.needsUpdate = true;
+                        material.needsUpdate = true;
+                    },
+                    // onProgress callback currently not supported
+                    undefined,
+                    // onError callback
+                    function ( err ) { console.error( 'An error happened.' ); }
+                );
+            } else {
+                material.map = null;
+            }
         } else {
              Object.assign(material[this.getProperty()], value);
         }
@@ -103,16 +112,25 @@ class i2ActionMaterialProperty extends i2Action {
         if(this.getProperty() == "color") {
             material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
         } else if(this.getProperty() == "mapImage") {
-            var loader = new THREE.TextureLoader();
-            loader.load(defaultValue, ( texture ) => {
-                    material.map.image = texture.image;
-                    material.map.needsUpdate = true;
-                },
-                // onProgress callback currently not supported
-                undefined,
-                // onError callback
-                function ( err ) { console.error( 'An error happened.' ); }
-            );
+            if(defaultValue != null) {
+                var loader = new THREE.TextureLoader();
+                loader.load(defaultValue, ( texture ) => {
+                        if(material.map == null) {
+                            material.map = texture;
+                        } else {
+                            material.map.image = texture.image;
+                        }
+                        material.map.needsUpdate = true;
+                        material.needsUpdate = true;
+                    },
+                    // onProgress callback currently not supported
+                    undefined,
+                    // onError callback
+                    function ( err ) { console.error( 'An error happened.' ); }
+                );
+            } else {
+                material.map = null;
+            }
         } else {
             Object.assign(material[this.getProperty()], defaultValue);
         }
