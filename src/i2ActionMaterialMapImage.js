@@ -1,12 +1,13 @@
 "use strict";
 
-class i2ActionMaterialProperty extends i2Action {
+class i2ActionMaterialMapImage extends i2Action {
     constructor() {
         super();
-        this.setType("i2ActionMaterialProperty");
+        this.setType("i2ActionMaterialMapImage");
         this.materialSelector = null;
         this.property = null;
         this.value = null;
+        this.baseDir = null;
     }
 
     setData(data) {
@@ -39,12 +40,18 @@ class i2ActionMaterialProperty extends i2Action {
     setValue(value) { this.value = value; }
     getValue() { return this.value; }
 
+    setBaseDir(dir) { this.baseDir = decodeURI(dir); }
+    getBaseDir() { return this.baseDir; }
+
     initialize(data) {
         if(data && data.materialSelector) {
             this.setMaterialSelector(data.materialSelector);
         }
         if(data && data.property) {
             this.setProperty(data.property);
+        }
+        if(data && data.baseDir) {
+            this.setBaseDir(data.baseDir);
         }
         if(data && data.value) {
             this.setValue(data.value);
@@ -68,25 +75,17 @@ class i2ActionMaterialProperty extends i2Action {
             material.userData.overrides[this.getProperty()].default = data.default;
         } else {
             if(this.getProperty() == "mapImage") {
-                material.userData.overrides[this.getProperty()].default = material.map != null ? material.map.image.src : null;
-            } else {
-                material.userData.overrides[this.getProperty()].default = Object.assign({}, material[this.getProperty()]); // shallow clone
+                material.userData.overrides[this.getProperty()].default = material.map != null ? decodeURI(material.map.image.src).substr(this.baseDir.length) : null;
             }
         }
     }
     execute() {
-        let material = this.getMaterialSelector().getMaterial();
+        let material = this.materialSelector.getMaterial();
         let value = this.getValue().getValueData();
-        if(this.getProperty() == "color") {
-            if(typeof value == "string") {
-                material[this.getProperty()] = new THREE.Color(value);
-            } else {
-                material[this.getProperty()] = new THREE.Color(value.r, value.g, value.b);
-            }
-        } else if(this.getProperty() == "mapImage") {
+        if(this.getProperty() == "mapImage") {
             if(value != null) {
                 var loader = new THREE.TextureLoader();
-                loader.load(value, ( texture ) => {
+                loader.load(this.baseDir+value, ( texture ) => {
                         if(material.map == null) {
                             material.map = texture;
                         } else {
@@ -111,7 +110,7 @@ class i2ActionMaterialProperty extends i2Action {
         material.userData.overrides[this.getProperty()].overridden = true;
     }
     revert() {
-        let material = this.getMaterialSelector().getMaterial();
+        let material = this.materialSelector.getMaterial();
         let defaultValue = material.userData.overrides[this.getProperty()].default;
         if(this.getProperty() == "color") {
             if(typeof defaultValue == "string") {
@@ -122,7 +121,7 @@ class i2ActionMaterialProperty extends i2Action {
         } else if(this.getProperty() == "mapImage") {
             if(defaultValue != null) {
                 var loader = new THREE.TextureLoader();
-                loader.load(defaultValue, ( texture ) => {
+                loader.load(this.baseDir+defaultValue, ( texture ) => {
                         if(material.map == null) {
                             material.map = texture;
                         } else {
