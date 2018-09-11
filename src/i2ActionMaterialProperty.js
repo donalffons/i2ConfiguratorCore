@@ -83,28 +83,9 @@ class i2ActionMaterialProperty extends i2Action {
             } else {
                 material[this.getProperty()] = new THREE.Color(value.r, value.g, value.b);
             }
-        } else if(this.getProperty() == "mapImage") {
-            if(value != null) {
-                var loader = new THREE.TextureLoader();
-                loader.load(value, ( texture ) => {
-                        if(material.map == null) {
-                            material.map = texture;
-                        } else {
-                            material.map.image = texture.image;
-                        }
-                        material.map.needsUpdate = true;
-                        material.needsUpdate = true;
-                    },
-                    // onProgress callback currently not supported
-                    undefined,
-                    // onError callback
-                    function ( err ) { console.error( 'An error happened.' ); }
-                );
-            } else {
-                material.map = null;
-            }
         } else {
-             Object.assign(material[this.getProperty()], value);
+             // legacy: Object.assign(material[this.getProperty()], value);
+             material[this.getProperty()] = value;
         }
 
         material.needsUpdate = true;
@@ -119,28 +100,9 @@ class i2ActionMaterialProperty extends i2Action {
             } else {
                 material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
             }
-        } else if(this.getProperty() == "mapImage") {
-            if(defaultValue != null) {
-                var loader = new THREE.TextureLoader();
-                loader.load(defaultValue, ( texture ) => {
-                        if(material.map == null) {
-                            material.map = texture;
-                        } else {
-                            material.map.image = texture.image;
-                        }
-                        material.map.needsUpdate = true;
-                        material.needsUpdate = true;
-                    },
-                    // onProgress callback currently not supported
-                    undefined,
-                    // onError callback
-                    function ( err ) { console.error( 'An error happened.' ); }
-                );
-            } else {
-                material.map = null;
-            }
         } else {
-            Object.assign(material[this.getProperty()], defaultValue);
+            // legacy: Object.assign(material[this.getProperty()], defaultValue);
+             material[this.getProperty()] = defaultValue;
         }
 
         material.needsUpdate = true;
