@@ -74,36 +74,30 @@ class i2ActionMaterialMapImage extends i2Action {
         if(data && data.default) {
             material.userData.overrides[this.getProperty()].default = data.default;
         } else {
-            if(this.getProperty() == "mapImage") {
-                material.userData.overrides[this.getProperty()].default = material.map != null ? decodeURI(material.map.image.src).substr(this.baseDir.length) : null;
-            }
+            material.userData.overrides[this.getProperty()].default = material[this.getProperty()] != null ? decodeURI(material[this.getProperty()].image.src).substr(this.baseDir.length) : null;
         }
     }
     execute() {
         let material = this.materialSelector.getMaterial();
         let value = this.getValue().getValueData();
-        if(this.getProperty() == "mapImage") {
-            if(value != null) {
-                var loader = new THREE.TextureLoader();
-                loader.load(this.baseDir+value, ( texture ) => {
-                        if(material.map == null) {
-                            material.map = texture;
-                        } else {
-                            material.map.image = texture.image;
-                        }
-                        material.map.needsUpdate = true;
-                        material.needsUpdate = true;
-                    },
-                    // onProgress callback currently not supported
-                    undefined,
-                    // onError callback
-                    function ( err ) { console.error( 'An error happened.' ); }
-                );
-            } else {
-                material.map = null;
-            }
+        if(value != null) {
+            var loader = new THREE.TextureLoader();
+            loader.load(this.baseDir+value, ( texture ) => {
+                    if(material[this.getProperty()] == null) {
+                        material[this.getProperty()] = texture;
+                    } else {
+                        material[this.getProperty()].image = texture.image;
+                    }
+                    material[this.getProperty()].needsUpdate = true;
+                    material.needsUpdate = true;
+                },
+                // onProgress callback currently not supported
+                undefined,
+                // onError callback
+                function ( err ) { console.error( 'An error happened.' ); }
+            );
         } else {
-             Object.assign(material[this.getProperty()], value);
+            material[this.getProperty()] = null;
         }
 
         material.needsUpdate = true;
@@ -112,34 +106,24 @@ class i2ActionMaterialMapImage extends i2Action {
     revert() {
         let material = this.materialSelector.getMaterial();
         let defaultValue = material.userData.overrides[this.getProperty()].default;
-        if(this.getProperty() == "color") {
-            if(typeof defaultValue == "string") {
-                material[this.getProperty()] = new THREE.Color(defaultValue);
-            } else {
-                material[this.getProperty()] = new THREE.Color(defaultValue.r, defaultValue.g, defaultValue.b);
-            }
-        } else if(this.getProperty() == "mapImage") {
-            if(defaultValue != null) {
-                var loader = new THREE.TextureLoader();
-                loader.load(this.baseDir+defaultValue, ( texture ) => {
-                        if(material.map == null) {
-                            material.map = texture;
-                        } else {
-                            material.map.image = texture.image;
-                        }
-                        material.map.needsUpdate = true;
-                        material.needsUpdate = true;
-                    },
-                    // onProgress callback currently not supported
-                    undefined,
-                    // onError callback
-                    function ( err ) { console.error( 'An error happened.' ); }
-                );
-            } else {
-                material.map = null;
-            }
+        if(defaultValue != null) {
+            var loader = new THREE.TextureLoader();
+            loader.load(this.baseDir+defaultValue, ( texture ) => {
+                    if(material[this.getProperty()] == null) {
+                        material[this.getProperty()] = texture;
+                    } else {
+                        material[this.getProperty()].image = texture.image;
+                    }
+                    material[this.getProperty()].needsUpdate = true;
+                    material.needsUpdate = true;
+                },
+                // onProgress callback currently not supported
+                undefined,
+                // onError callback
+                function ( err ) { console.error( 'An error happened.' ); }
+            );
         } else {
-            Object.assign(material[this.getProperty()], defaultValue);
+            material[this.getProperty()] = null;
         }
 
         material.needsUpdate = true;
