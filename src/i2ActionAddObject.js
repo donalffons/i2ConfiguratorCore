@@ -35,6 +35,17 @@ class i2ActionAddObject extends i2Action {
     setOnObjectAdded(cb) { this.onObjectAdded = cb; }
     getOnObjectAdded() { return this.onObjectAdded; }
 
+    initialize(data) { 
+        if(data && data.objectsSelector) {
+            this.setObjectsSelector(data.objectsSelector);
+        }
+        if(data && data.value) {
+            this.setValue(data.value);
+        }
+        if(data && data.tags) {
+            this.setTags(data.tags);
+        }
+    }
     execute() {
         let parent = this.objectsSelectorParent.getObjects();
         if(parent.length != 1) {
